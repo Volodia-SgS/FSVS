@@ -1,4 +1,7 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+
+/** Fenêtres ouvertes, de la plus ancienne à la plus récente : Échap ne ferme que la dernière. */
+const stack: symbol[] = [];
 
 export function Modal({
   title,
@@ -11,11 +14,19 @@ export function Modal({
   children: ReactNode;
   wide?: boolean;
 }) {
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const me = Symbol(title);
+    stack.push(me);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && stack[stack.length - 1] === me && closeRef.current();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      stack.splice(stack.indexOf(me), 1);
+    };
+  }, [title]);
 
   return (
     <div className="modal-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>

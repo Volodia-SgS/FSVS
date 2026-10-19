@@ -894,3 +894,323 @@ label.inline {
     opacity: 0.3;
   }
 }
+
+/* ---- Sections et sous-onglets */
+.subnav {
+  display: flex;
+  gap: 4px;
+  padding: 8px 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.subnav button {
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.subnav button.active {
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-weight: 600;
+}
+.coming-soon {
+  text-align: center;
+  padding: 48px 18px;
+}
+
+/* ---- Emploi du temps */
+.schedule {
+  padding: 14px;
+}
+.schedule-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.week-nav > button.ghost:not(.small) {
+  font-size: 22px;
+  line-height: 1;
+  padding: 4px 10px;
+}
+.legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+.week-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 210px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.week-grid {
+  display: grid;
+  grid-template-columns: 44px repeat(7, minmax(96px, 1fr));
+  min-width: 720px;
+}
+.week-corner,
+.week-day-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.week-corner {
+  left: 0;
+  z-index: 4;
+}
+.week-day-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.week-day-head b {
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.week-day-head.today b {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-radius: 999px;
+  min-width: 30px;
+  text-align: center;
+}
+.week-hours {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+}
+.week-hours span {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+}
+.week-col {
+  position: relative;
+  border-left: 1px solid var(--border);
+  background-image: linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  cursor: copy;
+}
+.week-col.today {
+  background-color: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--danger);
+  z-index: 1;
+  pointer-events: none;
+}
+.now-line::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+.event {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 3px 6px;
+  border: 0;
+  border-left: 3px solid var(--cat);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--cat) 24%, var(--card));
+  color: var(--text);
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.event:hover {
+  background: color-mix(in srgb, var(--cat) 36%, var(--card));
+}
+.event-title,
+.event-time {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.event-title {
+  font-weight: 600;
+}
+.event-time {
+  font-size: 11px;
+  opacity: 0.75;
+}
+.event.short {
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.event.short .event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event.eaten .event-title::after {
+  content: " ✓";
+}
+.cat-choice {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cat-choice button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+.cat-choice button.active {
+  border-color: var(--cat);
+  box-shadow: inset 0 0 0 1px var(--cat);
+  background: color-mix(in srgb, var(--cat) 18%, var(--card));
+  font-weight: 600;
+}
+
+/* ---- Repas prévus (suivi) */
+.planned {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.planned li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border-left: 3px solid #3d85c6;
+  background: color-mix(in srgb, #3d85c6 10%, var(--card));
+}
+.planned li.done {
+  opacity: 0.6;
+}
+.planned-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+@media (max-width: 560px) {
+  .subnav {
+    padding: 8px 16px;
+  }
+  .top .sections button {
+    font-size: 13px;
+    padding: 6px 9px;
+  }
+  .schedule {
+    padding: 10px;
+  }
+  .week-scroll {
+    max-height: calc(100vh - 250px);
+  }
+}
+
+/* ---- Mobile : sections en barre du bas, en-tête de semaine sur plusieurs lignes */
+@media (max-width: 560px) {
+  .top h1 {
+    white-space: nowrap;
+  }
+  .top .sections {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    overflow: visible;
+  }
+  .top .sections button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 5px 2px;
+    font-size: 11px;
+    border-radius: 10px;
+    white-space: normal;
+    line-height: 1.15;
+    text-align: center;
+  }
+  .top .sections button span {
+    font-size: 18px;
+  }
+  body {
+    padding-bottom: 64px;
+  }
+  .week-nav {
+    flex-basis: 100%;
+  }
+  .week-nav h2 {
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .schedule-head {
+    gap: 8px;
+  }
+  .schedule-head .legend {
+    flex: 1;
+  }
+  .week-scroll {
+    max-height: calc(100vh - 250px);
+  }
+}

@@ -3,14 +3,14 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import renames from "./renames.json";
 import seed from "./seed.json";
 import { supabase } from "./supabase";
-import type { AppData } from "./types";
+import { MEAL_CATEGORY, type AppData } from "./types";
 
 const STORAGE_KEY = "nutrition-data-v1";
 const SYNC_KEY = "nutrition-sync-v1";
 const PUSH_DELAY_MS = 800;
 const PULL_INTERVAL_MS = 60_000;
 
-export const seedData = (): AppData => structuredClone(seed) as AppData;
+export const seedData = (): AppData => migrate(structuredClone(seed) as unknown as AppData);
 
 function migrate(data: AppData): AppData {
   // v2 : le suivi repart de zéro, l'historique importé de l'Excel est effacé.
@@ -24,6 +24,21 @@ function migrate(data: AppData): AppData {
       version: 3,
       ingredients: fix(data.ingredients, renames.ingredients),
       recipes: fix(data.recipes, renames.recipes),
+    };
+  }
+  // v4 : ajout de l'emploi du temps.
+  if (data.version < 4) {
+    data = {
+      ...data,
+      version: 4,
+      schedule: data.schedule ?? {
+        categories: [
+          { id: "loisir", label: "Loisir", color: "#6aa84f" },
+          { id: "travail", label: "Travail", color: "#e69138" },
+          { id: MEAL_CATEGORY, label: "Repas", color: "#3d85c6" },
+        ],
+        events: [],
+      },
     };
   }
   return data;

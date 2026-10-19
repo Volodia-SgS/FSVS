@@ -38,7 +38,7 @@ export function Login() {
           run("signin");
         }}
       >
-        <h1>Nutrition</h1>
+        <h1>Mon espace</h1>
         <p className="muted small">Connecte-toi pour retrouver tes données sur tous tes appareils.</p>
         <label className="field">
           E-mail

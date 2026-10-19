@@ -1,7 +1,7 @@
 {
-  "name": "Nutrition",
-  "short_name": "Nutrition",
-  "description": "Suivi quotidien des macronutriments",
+  "name": "Mon espace",
+  "short_name": "Mon espace",
+  "description": "Nutrition, emploi du temps, projets et finance",
   "lang": "fr",
   "start_url": "/",
   "scope": "/",

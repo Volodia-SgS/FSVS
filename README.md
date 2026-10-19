@@ -1,6 +1,6 @@
-# Nutrition
+# Mon espace
 
-Webapp de suivi des macronutriments, reprise du classeur Excel « Nutrition 2 ».
+Webapp perso en sections : **Nutrition** (reprise du classeur Excel « Nutrition 2 »), **Emploi du temps** (semaine, items colorés par type, repas planifiés reportables dans le suivi), **Projets** et **Finance** (à venir).
 
 - **Suivi** : saisie du jour (ingrédients en g / unités / portions, recettes en repas, saisie libre), écart aux objectifs, historique coloré comme la mise en forme conditionnelle de l'Excel.
 - **Recettes** : ingrédients de la recette complète + nombre de repas → valeurs d'un repas. Les recettes importées gardent les valeurs de l'Excel (« saisies à la main ») tant que la liste d'ingrédients n'est pas complète.
@@ -22,7 +22,7 @@ npx vite
 
 Hébergé sur Vercel (import du dépôt GitHub, préréglage Vite) avec les variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`. Chaque push sur `main` redéploie.
 
-Puis ouvrir http://localhost:5180.
+Puis ouvrir http://localhost:5180. Pour tester sans compte ni Supabase : `npx vite --mode offline --port 5181` avec un fichier `.env.offline.local` aux variables vides.
 
 ## Réimporter l'Excel
 

@@ -60,8 +60,39 @@ export interface Objective {
   above?: Level;
 }
 
+/** Type d'item de l'emploi du temps, avec sa couleur. */
+export interface Category {
+  id: string;
+  label: string;
+  color: string;
+}
+
+/** Catégorie réservée aux repas planifiés (aliments + quantités). */
+export const MEAL_CATEGORY = "repas";
+
+export interface ScheduleEvent {
+  id: string;
+  /** Date ISO (AAAA-MM-JJ). */
+  date: string;
+  /** Heures « HH:MM ». */
+  start: string;
+  end: string;
+  title: string;
+  categoryId: string;
+  /** Repas planifié : aliments prévus. */
+  foods?: Entry[];
+  /** Repas planifié déjà reporté dans le suivi nutrition. */
+  eaten?: boolean;
+}
+
+export interface Schedule {
+  categories: Category[];
+  events: ScheduleEvent[];
+}
+
 export interface AppData {
   version: number;
+  schedule: Schedule;
   ingredients: Ingredient[];
   recipes: Recipe[];
   /** Clé = date ISO (AAAA-MM-JJ). */
