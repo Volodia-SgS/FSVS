@@ -1,0 +1,2012 @@
+{
+ "version": 3,
+ "ingredients": [
+  {
+   "id": "ing-2",
+   "name": "Riz basmati",
+   "basis": "100g",
+   "values": [
+    353.0,
+    8.0,
+    78.0,
+    0.2,
+    0.8,
+    0.2,
+    0.9,
+    0.01
+   ]
+  },
+  {
+   "id": "ing-3",
+   "name": "Bavette aloyau Charal",
+   "basis": "100g",
+   "values": [
+    114.0,
+    21.0,
+    0.0,
+    0.0,
+    3.3,
+    1.5,
+    0.0,
+    0.15
+   ]
+  },
+  {
+   "id": "ing-4",
+   "name": "Skyr",
+   "basis": "100g",
+   "values": [
+    57.0,
+    10.0,
+    3.9,
+    3.9,
+    0.2,
+    0.1,
+    0.0,
+    0.09
+   ]
+  },
+  {
+   "id": "ing-5",
+   "name": "Pâtes",
+   "basis": "100g",
+   "values": [
+    359.0,
+    12.5,
+    71.2,
+    3.5,
+    2.0,
+    0.5,
+    3.0,
+    0.013
+   ]
+  },
+  {
+   "id": "ing-6",
+   "name": "Poivron",
+   "basis": "100g",
+   "values": [
+    35.7,
+    1.06,
+    6.0,
+    4.8,
+    0.5,
+    0.0,
+    2.0,
+    0.0
+   ],
+   "unitWeight": 140.0
+  },
+  {
+   "id": "ing-7",
+   "name": "Oignon",
+   "basis": "100g",
+   "values": [
+    40.2,
+    1.19,
+    6.5,
+    0.2,
+    0.5,
+    0.0,
+    2.7,
+    0.0
+   ],
+   "unitWeight": 100.0
+  },
+  {
+   "id": "ing-8",
+   "name": "Échalote",
+   "basis": "100g",
+   "values": [
+    66.9,
+    1.81,
+    12.25,
+    3.3,
+    0.5,
+    0.0,
+    2.75,
+    0.0
+   ],
+   "unitWeight": 15.0
+  },
+  {
+   "id": "ing-9",
+   "name": "Concombre",
+   "basis": "100g",
+   "values": [
+    14.7,
+    0.56,
+    2.23,
+    1.8,
+    0.5,
+    0.0,
+    0.8,
+    0.0
+   ],
+   "unitWeight": 300.0
+  },
+  {
+   "id": "ing-10",
+   "name": "Thon nature",
+   "basis": "100g",
+   "values": [
+    109.0,
+    25.0,
+    0.0,
+    0.0,
+    1.0,
+    0.5,
+    0.0,
+    1.0
+   ],
+   "unitWeight": 140.0
+  },
+  {
+   "id": "ing-11",
+   "name": "Mayonnaise",
+   "basis": "100g",
+   "values": [
+    650.0,
+    1.0,
+    2.8,
+    2.0,
+    70.0,
+    5.5,
+    0.0,
+    1.3
+   ],
+   "unitWeight": 10.0
+  },
+  {
+   "id": "ing-12",
+   "name": "Yaourt prot. Auchan",
+   "basis": "100g",
+   "values": [
+    79.0,
+    10.0,
+    5.7,
+    5.0,
+    1.5,
+    0.9,
+    1.0,
+    0.25
+   ],
+   "unitWeight": 130.0
+  },
+  {
+   "id": "ing-13",
+   "name": "Biscuit Prince",
+   "basis": "100g",
+   "values": [
+    466.0,
+    6.3,
+    69.0,
+    32.0,
+    17.0,
+    5.6,
+    3.9,
+    0.51
+   ],
+   "unitWeight": 20.0
+  },
+  {
+   "id": "ing-14",
+   "name": "Oeuf",
+   "basis": "100g",
+   "values": [
+    140.0,
+    12.7,
+    0.27,
+    0.27,
+    9.83,
+    2.64,
+    0.0,
+    0.0
+   ],
+   "unitWeight": 60.0
+  },
+  {
+   "id": "ing-15",
+   "name": "Banane",
+   "basis": "100g",
+   "values": [
+    90.5,
+    1.06,
+    19.7,
+    15.6,
+    0.5,
+    0.0,
+    2.7,
+    0.0
+   ],
+   "unitWeight": 100.0
+  },
+  {
+   "id": "ing-16",
+   "name": "Poire",
+   "basis": "100g",
+   "values": [
+    57.0,
+    0.49,
+    10.9,
+    9.01,
+    0.27,
+    0.1,
+    2.9,
+    0.0
+   ],
+   "unitWeight": 120.0
+  },
+  {
+   "id": "ing-17",
+   "name": "Pain",
+   "basis": "100g",
+   "values": [
+    276.0,
+    8.21,
+    54.4,
+    2.74,
+    1.61,
+    0.37,
+    3.84,
+    0.5
+   ]
+  },
+  {
+   "id": "ing-18",
+   "name": "Crème semi-épaisse",
+   "basis": "100g",
+   "values": [
+    294.0,
+    2.3,
+    3.6,
+    3.2,
+    30.0,
+    19.5,
+    0.0,
+    0.08
+   ],
+   "unitWeight": 70.0
+  },
+  {
+   "id": "ing-19",
+   "name": "Concentré de tomate",
+   "basis": "100g",
+   "values": [
+    97.0,
+    4.7,
+    15.7,
+    13.2,
+    0.5,
+    0.0,
+    3.5,
+    1.2
+   ],
+   "unitWeight": 23.1
+  },
+  {
+   "id": "ing-20",
+   "name": "Poulet filet",
+   "basis": "100g",
+   "values": [
+    110.0,
+    23.4,
+    0.0,
+    0.0,
+    1.5,
+    0.44,
+    0.0,
+    0.043
+   ],
+   "unitWeight": 270.0
+  },
+  {
+   "id": "ing-21",
+   "name": "Crème soja",
+   "basis": "100g",
+   "values": [
+    175.0,
+    3.1,
+    3.5,
+    1.6,
+    16.0,
+    1.8,
+    0.7,
+    0.1
+   ],
+   "unitWeight": 70.0
+  },
+  {
+   "id": "ing-22",
+   "name": "Clémentine",
+   "basis": "100g",
+   "values": [
+    47.3,
+    0.81,
+    9.17,
+    8.6,
+    0.5,
+    0.0,
+    1.7,
+    0.0
+   ],
+   "unitWeight": 150.0
+  },
+  {
+   "id": "ing-23",
+   "name": "Lentilles",
+   "basis": "100g",
+   "values": [
+    99.0,
+    6.1,
+    10.0,
+    0.8,
+    3.2,
+    1.1,
+    2.8,
+    0.7
+   ]
+  },
+  {
+   "id": "ing-24",
+   "name": "Jambon",
+   "basis": "100g",
+   "values": [
+    125.0,
+    20.0,
+    1.7,
+    1.7,
+    4.5,
+    1.78,
+    0.0,
+    0.9
+   ]
+  },
+  {
+   "id": "ing-25",
+   "name": "Fromage Leerdammer",
+   "basis": "100g",
+   "values": [
+    352.0,
+    26.0,
+    0.0,
+    0.0,
+    27.5,
+    18.5,
+    0.0,
+    1.5
+   ],
+   "unitWeight": 25.0
+  },
+  {
+   "id": "ing-26",
+   "name": "Skyr pot",
+   "basis": "100g",
+   "values": [
+    67.0,
+    9.1,
+    3.9,
+    3.1,
+    1.5,
+    1.0,
+    0.0,
+    0.13
+   ]
+  },
+  {
+   "id": "ing-27",
+   "name": "Yaourt fruit Yoplait",
+   "basis": "100g",
+   "values": [
+    92.0,
+    3.4,
+    12.8,
+    12.4,
+    2.7,
+    1.9,
+    0.2,
+    0.13
+   ],
+   "unitWeight": 125.0
+  },
+  {
+   "id": "ing-28",
+   "name": "Farine",
+   "basis": "100g",
+   "values": [
+    350.0,
+    9.03,
+    73.7,
+    1.5,
+    1.0,
+    0.19,
+    3.2,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-29",
+   "name": "Sucre",
+   "basis": "100g",
+   "values": [
+    400.0,
+    0.0,
+    99.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-30",
+   "name": "Sauce Teriyaki",
+   "basis": "100g",
+   "values": [
+    100.0,
+    3.0,
+    20.0,
+    15.0,
+    0.0,
+    0.0,
+    0.0,
+    3.0
+   ]
+  },
+  {
+   "id": "ing-31",
+   "name": "Saumon",
+   "basis": "100g",
+   "values": [
+    194.0,
+    20.5,
+    0.0,
+    0.0,
+    12.4,
+    2.15,
+    0.0,
+    0.045
+   ]
+  },
+  {
+   "id": "ing-32",
+   "name": "Fromage râpé",
+   "basis": "100g",
+   "values": [
+    369.0,
+    27.0,
+    0.0,
+    0.0,
+    29.0,
+    19.0,
+    0.0,
+    0.7
+   ]
+  },
+  {
+   "id": "ing-33",
+   "name": "Sardines à l'huile",
+   "basis": "100g",
+   "values": [
+    320.0,
+    17.0,
+    0.0,
+    0.0,
+    28.0,
+    5.5,
+    0.0,
+    1.4
+   ]
+  },
+  {
+   "id": "ing-34",
+   "name": "Carottes",
+   "basis": "100g",
+   "values": [
+    40.2,
+    0.63,
+    7.59,
+    6.0,
+    0.0,
+    0.0,
+    2.7,
+    0.043
+   ]
+  },
+  {
+   "id": "ing-35",
+   "name": "Beurre",
+   "basis": "100g",
+   "values": [
+    741.0,
+    0.69,
+    1.0,
+    0.84,
+    81.5,
+    54.5,
+    0.01,
+    0.029
+   ]
+  },
+  {
+   "id": "ing-36",
+   "name": "Whey",
+   "basis": "portion",
+   "values": [
+    116.0,
+    24.0,
+    1.6,
+    1.0,
+    1.4,
+    0.5,
+    0.7,
+    0.12
+   ],
+   "unitLabel": "scoop"
+  },
+  {
+   "id": "ing-37",
+   "name": "All Bran",
+   "basis": "100g",
+   "values": [
+    334.0,
+    14.0,
+    48.0,
+    18.0,
+    3.5,
+    0.7,
+    27.0,
+    0.95
+   ]
+  },
+  {
+   "id": "ing-38",
+   "name": "Pims",
+   "basis": "100g",
+   "values": [
+    400.0,
+    3.3,
+    66.0,
+    49.0,
+    13.0,
+    5.9,
+    2.5,
+    0.43
+   ],
+   "unitWeight": 150.0
+  },
+  {
+   "id": "ing-39",
+   "name": "Pain au chocolat",
+   "basis": "100g",
+   "values": [
+    401.0,
+    7.4,
+    48.6,
+    12.3,
+    19.7,
+    12.3,
+    1.5,
+    0.45
+   ]
+  },
+  {
+   "id": "ing-40",
+   "name": "Yaourt Hipro",
+   "basis": "100g",
+   "values": [
+    77.0,
+    10.2,
+    6.0,
+    4.5,
+    0.8,
+    0.5,
+    0.0,
+    0.37
+   ],
+   "unitWeight": 180.0
+  },
+  {
+   "id": "ing-41",
+   "name": "Mousse chocolat",
+   "basis": "100g",
+   "values": [
+    177.0,
+    1.4,
+    23.8,
+    20.4,
+    8.2,
+    5.8,
+    1.2,
+    0.19
+   ],
+   "unitWeight": 50.0
+  },
+  {
+   "id": "ing-42",
+   "name": "Fraises",
+   "basis": "100g",
+   "values": [
+    38.6,
+    0.6,
+    6.03,
+    5.6,
+    0.5,
+    0.0,
+    3.8,
+    0.005
+   ]
+  },
+  {
+   "id": "ing-43",
+   "name": "Crème fluide Michel & Augustin",
+   "basis": "100g",
+   "values": [
+    70.0,
+    2.9,
+    12.0,
+    9.8,
+    1.2,
+    0.9,
+    0.5,
+    0.08
+   ]
+  },
+  {
+   "id": "ing-44",
+   "name": "Flocons d'avoine",
+   "basis": "100g",
+   "values": [
+    367.0,
+    13.0,
+    56.0,
+    1.0,
+    7.0,
+    0.5,
+    10.0,
+    0.02
+   ]
+  },
+  {
+   "id": "ing-45",
+   "name": "Lait semi-écrémé",
+   "basis": "100g",
+   "values": [
+    47.0,
+    3.4,
+    4.8,
+    4.66,
+    1.6,
+    1.4,
+    0.0,
+    0.036
+   ]
+  },
+  {
+   "id": "ing-46",
+   "name": "Riz au lait nature",
+   "basis": "100g",
+   "values": [
+    122.0,
+    3.0,
+    20.2,
+    12.3,
+    3.2,
+    2.1,
+    0.1,
+    0.22
+   ],
+   "unitWeight": 115.0
+  },
+  {
+   "id": "ing-47",
+   "name": "Riz complet",
+   "basis": "100g",
+   "values": [
+    339.0,
+    7.02,
+    71.4,
+    0.66,
+    2.8,
+    0.61,
+    5.0,
+    0.004
+   ]
+  },
+  {
+   "id": "ing-48",
+   "name": "Dinde escalope",
+   "basis": "100g",
+   "values": [
+    109.0,
+    24.1,
+    0.5,
+    0.32,
+    1.22,
+    0.29,
+    0.0,
+    0.082
+   ]
+  },
+  {
+   "id": "ing-49",
+   "name": "Sirop d'érable",
+   "basis": "100g",
+   "values": [
+    270.0,
+    0.0,
+    67.0,
+    58.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-50",
+   "name": "Corn flakes",
+   "basis": "100g",
+   "values": [
+    378.0,
+    7.0,
+    84.0,
+    8.0,
+    0.9,
+    0.2,
+    3.0,
+    1.778
+   ]
+  },
+  {
+   "id": "ing-51",
+   "name": "Raisins secs",
+   "basis": "100g",
+   "values": [
+    321.0,
+    3.0,
+    73.2,
+    70.3,
+    0.9,
+    0.31,
+    4.2,
+    0.005
+   ]
+  },
+  {
+   "id": "ing-52",
+   "name": "Beurre de cacahuète",
+   "basis": "100g",
+   "values": [
+    590.0,
+    22.2,
+    16.1,
+    10.5,
+    52.5,
+    10.4,
+    5.0,
+    0.388
+   ]
+  },
+  {
+   "id": "ing-53",
+   "name": "Riz au lait vanille",
+   "basis": "100g",
+   "values": [
+    124.0,
+    2.9,
+    22.0,
+    12.0,
+    2.9,
+    1.9,
+    0.0,
+    0.13
+   ],
+   "unitWeight": 115.0
+  },
+  {
+   "id": "ing-54",
+   "name": "Panier Yoplait fruit",
+   "basis": "100g",
+   "values": [
+    93.0,
+    3.2,
+    13.2,
+    12.8,
+    2.6,
+    1.7,
+    0.2,
+    0.13
+   ]
+  },
+  {
+   "id": "ing-55",
+   "name": "Mousse chocolat PAM",
+   "basis": "100g",
+   "values": [
+    394.0,
+    3.8,
+    26.0,
+    22.0,
+    30.0,
+    19.0,
+    0.0,
+    0.07
+   ]
+  },
+  {
+   "id": "ing-56",
+   "name": "Son d'avoine",
+   "basis": "100g",
+   "values": [
+    359.0,
+    15.8,
+    51.2,
+    2.33,
+    6.48,
+    1.16,
+    16.7,
+    0.006
+   ]
+  },
+  {
+   "id": "ing-57",
+   "name": "Cheesecake fruits",
+   "basis": "100g",
+   "values": [
+    304.0,
+    4.0,
+    25.0,
+    19.0,
+    20.22,
+    5.4,
+    0.31,
+    0.44
+   ],
+   "unitWeight": 110.0
+  },
+  {
+   "id": "ing-58",
+   "name": "Nectarine",
+   "basis": "100g",
+   "values": [
+    51.3,
+    0.7,
+    11.3,
+    8.8,
+    0.0,
+    0.0,
+    0.6,
+    0.005
+   ],
+   "unitWeight": 125.0
+  },
+  {
+   "id": "ing-59",
+   "name": "Melon jaune",
+   "basis": "100g",
+   "values": [
+    33.0,
+    0.8,
+    9.0,
+    8.0,
+    0.2,
+    0.0,
+    0.9,
+    0.016
+   ]
+  },
+  {
+   "id": "ing-60",
+   "name": "Avocat",
+   "basis": "100g",
+   "values": [
+    205.0,
+    1.56,
+    0.83,
+    0.4,
+    20.6,
+    4.51,
+    3.6,
+    0.02
+   ],
+   "unitWeight": 150.0
+  },
+  {
+   "id": "ing-61",
+   "name": "Maïs",
+   "basis": "100g",
+   "values": [
+    80.0,
+    2.0,
+    15.0,
+    6.0,
+    1.0,
+    0.0,
+    2.0,
+    0.006
+   ]
+  },
+  {
+   "id": "ing-62",
+   "name": "Huile d'olive",
+   "basis": "100g",
+   "values": [
+    900.0,
+    0.4,
+    0.0,
+    0.0,
+    99.9,
+    15.2,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-63",
+   "name": "Sorbet d'açai",
+   "basis": "100g",
+   "values": [
+    110.0,
+    0.5,
+    21.0,
+    16.0,
+    4.0,
+    1.5,
+    3.0,
+    0.03
+   ]
+  },
+  {
+   "id": "ing-64",
+   "name": "Coco râpée",
+   "basis": "100g",
+   "values": [
+    685.0,
+    7.7,
+    10.0,
+    7.7,
+    66.0,
+    63.0,
+    15.0,
+    0.1
+   ]
+  },
+  {
+   "id": "ing-65",
+   "name": "Éclats de cacao",
+   "basis": "100g",
+   "values": [
+    646.0,
+    13.0,
+    35.7,
+    10.0,
+    53.5,
+    32.5,
+    10.9,
+    0.01
+   ]
+  },
+  {
+   "id": "ing-66",
+   "name": "Skyr coulis fruits rouges",
+   "basis": "100g",
+   "values": [
+    80.0,
+    7.8,
+    11.1,
+    10.6,
+    0.5,
+    0.1,
+    0.1,
+    0.12
+   ]
+  },
+  {
+   "id": "ing-67",
+   "name": "Pomme de terre",
+   "basis": "100g",
+   "values": [
+    80.5,
+    2.2,
+    16.2,
+    0.78,
+    0.18,
+    0.03,
+    1.8,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-68",
+   "name": "Patate douce",
+   "basis": "100g",
+   "values": [
+    86.3,
+    1.5,
+    18.3,
+    5.64,
+    0.15,
+    0.06,
+    2.87,
+    0.003
+   ]
+  },
+  {
+   "id": "ing-69",
+   "name": "Nutella",
+   "basis": "100g",
+   "values": [
+    538.0,
+    6.3,
+    57.5,
+    56.3,
+    30.9,
+    10.6,
+    3.6,
+    0.044
+   ]
+  },
+  {
+   "id": "ing-70",
+   "name": "Fromage crotin de Chavignol",
+   "basis": "100g",
+   "values": [
+    296.0,
+    19.7,
+    0.0,
+    0.0,
+    24.4,
+    16.2,
+    0.0,
+    1.3
+   ]
+  },
+  {
+   "id": "ing-71",
+   "name": "Graines de chia",
+   "basis": "100g",
+   "values": [
+    366.0,
+    19.5,
+    7.72,
+    1.1,
+    30.7,
+    3.33,
+    34.4,
+    0.04
+   ]
+  },
+  {
+   "id": "ing-72",
+   "name": "Kiwi",
+   "basis": "100g",
+   "values": [
+    60.5,
+    0.88,
+    11.0,
+    8.9,
+    0.6,
+    0.13,
+    2.4,
+    0.005
+   ]
+  },
+  {
+   "id": "ing-73",
+   "name": "Haricots verts",
+   "basis": "100g",
+   "values": [
+    20.0,
+    1.6,
+    1.5,
+    0.5,
+    0.0,
+    0.0,
+    3.5,
+    0.58
+   ]
+  },
+  {
+   "id": "ing-74",
+   "name": "Graines de courge",
+   "basis": "100g",
+   "values": [
+    582.0,
+    24.4,
+    14.2,
+    0.3,
+    45.6,
+    9.4,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-75",
+   "name": "Chips coco",
+   "basis": "100g",
+   "values": [
+    698.0,
+    6.8,
+    10.0,
+    7.3,
+    68.0,
+    64.0,
+    11.0,
+    0.03
+   ]
+  },
+  {
+   "id": "ing-76",
+   "name": "Lait en poudre",
+   "basis": "100g",
+   "values": [
+    357.0,
+    35.0,
+    52.0,
+    52.0,
+    1.0,
+    0.7,
+    0.0,
+    1.4
+   ]
+  },
+  {
+   "id": "ing-77",
+   "name": "Fromage Blanc Fraise Coco PAM",
+   "basis": "100g",
+   "values": [
+    236.0,
+    14.0,
+    27.0,
+    16.0,
+    7.5,
+    3.3,
+    0.5,
+    0.01
+   ]
+  },
+  {
+   "id": "ing-78",
+   "name": "Barre céréales Kellogs choco noir",
+   "basis": "portion",
+   "values": [
+    85.0,
+    1.5,
+    14.0,
+    6.0,
+    2.0,
+    1.0,
+    9.6,
+    0.13
+   ],
+   "unitLabel": "barre"
+  },
+  {
+   "id": "ing-79",
+   "name": "Fondant chocolat Monoprix",
+   "basis": "100g",
+   "values": [
+    426.0,
+    5.6,
+    43.0,
+    38.0,
+    25.0,
+    16.0,
+    3.3,
+    0.28
+   ]
+  },
+  {
+   "id": "ing-80",
+   "name": "Granola",
+   "basis": "100g",
+   "values": [
+    489.0,
+    14.9,
+    53.3,
+    20.0,
+    24.1,
+    4.1,
+    9.0,
+    0.05
+   ]
+  },
+  {
+   "id": "ing-81",
+   "name": "Fromage Blanc Myrtille Coco PAM",
+   "basis": "100g",
+   "values": [
+    354.0,
+    5.5,
+    35.0,
+    20.0,
+    22.0,
+    17.0,
+    4.0,
+    0.14
+   ]
+  },
+  {
+   "id": "ing-82",
+   "name": "Saumon fumé",
+   "basis": "100g",
+   "values": [
+    191.0,
+    22.0,
+    0.2,
+    0.0,
+    11.0,
+    2.4,
+    0.0,
+    2.8
+   ]
+  },
+  {
+   "id": "ing-83",
+   "name": "Lait entier",
+   "basis": "100g",
+   "values": [
+    70.0,
+    4.24,
+    4.4,
+    3.79,
+    4.6,
+    3.73,
+    0.0,
+    0.15
+   ]
+  },
+  {
+   "id": "ing-84",
+   "name": "Yaourt Soja vanille",
+   "basis": "100g",
+   "values": [
+    82.0,
+    3.1,
+    13.4,
+    5.0,
+    1.7,
+    0.5,
+    1.0,
+    0.1
+   ]
+  },
+  {
+   "id": "ing-85",
+   "name": "Courgette",
+   "basis": "100g",
+   "values": [
+    23.0,
+    1.3,
+    1.8,
+    1.79,
+    0.26,
+    0.06,
+    1.05,
+    0.01
+   ]
+  },
+  {
+   "id": "ing-86",
+   "name": "Noix de cajou parmesan",
+   "basis": "100g",
+   "values": [
+    570.0,
+    19.0,
+    25.0,
+    5.6,
+    43.0,
+    8.3,
+    8.0,
+    1.9
+   ]
+  },
+  {
+   "id": "ing-87",
+   "name": "Nuggets Burger King",
+   "basis": "portion",
+   "values": [
+    174.0,
+    10.0,
+    17.0,
+    0.6,
+    7.2,
+    0.9,
+    0.0,
+    0.9
+   ],
+   "unitLabel": "portion"
+  },
+  {
+   "id": "ing-88",
+   "name": "Mangue",
+   "basis": "100g",
+   "values": [
+    73.9,
+    0.63,
+    14.3,
+    12.9,
+    0.2,
+    0.0,
+    1.6,
+    0.02
+   ]
+  },
+  {
+   "id": "ing-89",
+   "name": "Chocolat pâtissier",
+   "basis": "100g",
+   "values": [
+    548.0,
+    6.0,
+    50.7,
+    46.4,
+    34.0,
+    20.0,
+    7.3,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-90",
+   "name": "Haricots rouges",
+   "basis": "100g",
+   "values": [
+    96.0,
+    7.2,
+    12.0,
+    0.2,
+    0.7,
+    0.1,
+    6.5,
+    0.44
+   ]
+  },
+  {
+   "id": "ing-91",
+   "name": "Mousse chocolat HR",
+   "basis": "portion",
+   "values": [
+    283.2,
+    7.2,
+    28.28,
+    18.6933,
+    14.0667,
+    8.0667,
+    7.2533,
+    0.2933
+   ],
+   "unitLabel": "portion"
+  },
+  {
+   "id": "ing-92",
+   "name": "Tofu soyeux",
+   "basis": "100g",
+   "values": [
+    55.0,
+    4.6,
+    1.5,
+    1.13,
+    2.9,
+    0.47,
+    0.6,
+    0.0
+   ]
+  },
+  {
+   "id": "ing-93",
+   "name": "Chocolat noir",
+   "basis": "100g",
+   "values": [
+    614.0,
+    13.0,
+    11.0,
+    0.5,
+    54.0,
+    34.0,
+    7.3,
+    0.0
+   ]
+  }
+ ],
+ "recipes": [
+  {
+   "id": "rec-3",
+   "name": "Riz boeuf asiatique",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-2",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-3",
+     "qty": 250.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-6",
+     "qty": 150.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-7",
+     "qty": 100.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-8",
+     "qty": 15.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-28",
+     "qty": 500.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-29",
+     "qty": 300.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    800.595,
+    27.7857,
+    85.8075,
+    3.39,
+    4.0083,
+    1.4532,
+    2.9908,
+    0.255
+   ],
+   "notes": "Non trouvés dans la base : Sauce soja 12.0"
+  },
+  {
+   "id": "rec-4",
+   "name": "Pâtes poulet curry",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-5",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-20",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-7",
+     "qty": 150.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-18",
+     "qty": 100.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-19",
+     "qty": 22.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    566.4433,
+    34.3787,
+    76.1583,
+    5.3427,
+    12.1573,
+    3.9403,
+    4.855,
+    0.1236
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-5",
+   "name": "Concombre skyr",
+   "portions": 1,
+   "items": [
+    {
+     "refId": "ing-9",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-4",
+     "qty": 200.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-11",
+     "qty": 15.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-10",
+     "qty": 140.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    408.2,
+    56.83,
+    14.91,
+    13.5,
+    13.8,
+    1.725,
+    2.4,
+    1.775
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-6",
+   "name": "Pâtes saumon",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-5",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-31",
+     "qty": 210.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-18",
+     "qty": 90.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-35",
+     "qty": 5.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-32",
+     "qty": 30.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    632.25,
+    30.2515,
+    72.2967,
+    4.474,
+    23.9383,
+    10.6633,
+    3.0002,
+    0.139
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-7",
+   "name": "Lentilles",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    396.0,
+    24.4,
+    40.0,
+    3.2,
+    12.8,
+    4.4,
+    11.2,
+    2.8
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-8",
+   "name": "Riz complet dinde",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    641.56,
+    45.3973,
+    81.1533,
+    6.3367,
+    14.55,
+    3.54,
+    8.0833,
+    0.086
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-9",
+   "name": "Shaker avoine",
+   "portions": 1,
+   "items": [
+    {
+     "refId": "ing-44",
+     "qty": 100.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-45",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-15",
+     "qty": 100.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-52",
+     "qty": 25.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-49",
+     "qty": 25.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    813.5,
+    29.81,
+    110.875,
+    47.705,
+    25.425,
+    7.3,
+    13.95,
+    0.225
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-10",
+   "name": "Skyr Corn Flakes",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    408.0,
+    15.25,
+    83.65,
+    24.4,
+    0.875,
+    0.25,
+    2.25,
+    1.4235
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-11",
+   "name": "Petite faim BK",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    832.0,
+    27.0,
+    94.0,
+    6.6,
+    38.2,
+    7.4,
+    3.0,
+    0.0
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-12",
+   "name": "Salade avocat",
+   "portions": 1,
+   "items": [
+    {
+     "refId": "ing-60",
+     "qty": 1.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-14",
+     "qty": 1.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-9",
+     "qty": 1.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-50",
+     "qty": 30.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-61",
+     "qty": 30.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    629.0,
+    19.42,
+    37.905,
+    10.47,
+    42.8,
+    9.465,
+    9.3,
+    0.5652
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-13",
+   "name": "The one banane coco cacao",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    550.325,
+    5.135,
+    76.065,
+    54.67,
+    29.425,
+    17.3,
+    13.355,
+    0.102
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-14",
+   "name": "Riz poulet oeuf",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-2",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-20",
+     "qty": 260.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-14",
+     "qty": 3.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-6",
+     "qty": 3.0,
+     "unit": "unit"
+    },
+    {
+     "refId": "ing-7",
+     "qty": 1.0,
+     "unit": "unit"
+    }
+   ],
+   "manualValues": [
+    651.676,
+    43.5307,
+    88.215,
+    6.776,
+    12.795,
+    3.236,
+    4.391,
+    0.0487
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-15",
+   "name": "The one whey gr. chia kiwi",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    561.7,
+    30.727,
+    70.93,
+    52.835,
+    21.315,
+    5.8845,
+    19.26,
+    0.222
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-16",
+   "name": "Poulet patate haricot",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-20",
+     "qty": 260.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-67",
+     "qty": 1000.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-73",
+     "qty": 440.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    453.0,
+    29.84,
+    54.7333,
+    4.0667,
+    8.56,
+    6.628,
+    8.3467,
+    0.8879
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-17",
+   "name": "The one granola chia kiwi",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    494.9,
+    9.62,
+    70.034,
+    46.22,
+    23.37,
+    5.646,
+    17.08,
+    0.098
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-18",
+   "name": "Bol skyr protéines",
+   "portions": 1,
+   "items": [
+    {
+     "refId": "ing-4",
+     "qty": 200.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-36",
+     "qty": 1.0,
+     "unit": "portion"
+    },
+    {
+     "refId": "ing-49",
+     "qty": 15.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-52",
+     "qty": 15.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-71",
+     "qty": 20.0,
+     "unit": "g"
+    }
+   ],
+   "manualValues": [
+    432.2,
+    51.23,
+    23.409,
+    19.295,
+    15.815,
+    2.926,
+    8.33,
+    0.3662
+   ],
+   "notes": ""
+  },
+  {
+   "id": "rec-19",
+   "name": "Riz poulet pané haricots",
+   "portions": 3,
+   "items": [
+    {
+     "refId": "ing-20",
+     "qty": 300.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-73",
+     "qty": 220.0,
+     "unit": "g"
+    },
+    {
+     "refId": "ing-14",
+     "qty": 1.0,
+     "unit": "unit"
+    }
+   ],
+   "manualValues": [
+    503.7333,
+    35.312,
+    78.4099,
+    0.9765,
+    3.9228,
+    3.6437,
+    2.0733,
+    0.4798
+   ],
+   "notes": "Non trouvés dans la base : Panure 25g"
+  },
+  {
+   "id": "rec-20",
+   "name": "Crème beurre de cacahuète",
+   "portions": 1,
+   "items": [],
+   "manualValues": [
+    191.65,
+    9.25,
+    8.8993,
+    6.7512,
+    13.5113,
+    2.5032,
+    2.3975,
+    0.0738
+   ],
+   "notes": ""
+  }
+ ],
+ "days": {},
+ "objectives": {
+  "kcal": {
+   "target": 2400,
+   "min": 2200,
+   "max": 2650,
+   "below": "warn",
+   "above": "alert"
+  },
+  "proteines": {
+   "target": 130,
+   "min": 120,
+   "max": 155,
+   "below": "alert",
+   "above": "warn"
+  },
+  "glucides": {
+   "target": 300,
+   "min": 270,
+   "max": 350,
+   "below": "warn",
+   "above": "alert"
+  },
+  "sucres": {
+   "max": 100,
+   "below": "ok",
+   "above": "alert"
+  },
+  "lipides": {
+   "target": 70,
+   "min": 60,
+   "max": 80,
+   "below": "warn",
+   "above": "alert"
+  },
+  "satures": {},
+  "fibres": {
+   "target": 20,
+   "min": 17,
+   "below": "warn",
+   "above": "ok"
+  },
+  "sel": {}
+ }
+}

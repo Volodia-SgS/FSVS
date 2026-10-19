@@ -1,0 +1,23 @@
+{
+  "_doc": "Renommages appliqués à l'import de l'Excel et aux données déjà enregistrées (seulement si le nom n'a pas été modifié entre-temps). Clé = id, valeur = [ancien nom, nouveau nom].",
+  "ingredients": {
+    "ing-2": ["Riz basmati penjab", "Riz basmati"],
+    "ing-7": ["Onion", "Oignon"],
+    "ing-8": ["Échalotte", "Échalote"],
+    "ing-10": ["Thon", "Thon nature"],
+    "ing-18": ["Creme semi épaisse", "Crème semi-épaisse"],
+    "ing-21": ["Creme soja", "Crème soja"],
+    "ing-25": ["Leerdammer", "Fromage Leerdammer"],
+    "ing-26": ["Skyr goût", "Skyr pot"],
+    "ing-34": ["Carrotes", "Carottes"],
+    "ing-36": ["WHEY", "Whey"],
+    "ing-43": ["Michel & Augustin", "Crème fluide Michel & Augustin"],
+    "ing-65": ["Grué de cacao", "Éclats de cacao"],
+    "ing-66": ["Skyr coulis", "Skyr coulis fruits rouges"],
+    "ing-70": ["Crotin de Chavignolles", "Fromage crotin de Chavignol"],
+    "ing-89": ["Chocolat patissier", "Chocolat pâtissier"]
+  },
+  "recipes": {
+    "rec-20": ["Crème beure de cacahuète", "Crème beurre de cacahuète"]
+  }
+}
