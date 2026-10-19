@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Modal } from "../components/Modal";
 import { exportJson, seedData, useStore } from "../store";
 import { supabase } from "../supabase";
 import type { AppData, Level, Objective } from "../types";
@@ -13,6 +14,7 @@ const LEVELS: { value: Level; label: string }[] = [
 
 export function Objectives() {
   const { data, update, replace, session } = useStore();
+  const [pwdOpen, setPwdOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const edit = (key: string, fn: (o: Objective) => void) =>
@@ -107,6 +109,10 @@ export function Objectives() {
         {session ? (
           <p className="muted small">
             Connecté en tant que <b>{session.user.email}</b>. Tes données sont synchronisées entre tes appareils.{" "}
+            <button className="link" onClick={() => setPwdOpen(true)}>
+              Changer mon mot de passe
+            </button>
+            {" · "}
             <button className="link" onClick={() => supabase?.auth.signOut()}>
               Se déconnecter
             </button>
@@ -137,6 +143,59 @@ export function Objectives() {
           </button>
         </div>
       </section>
+      {pwdOpen && <PasswordModal onClose={() => setPwdOpen(false)} />}
     </>
+  );
+}
+
+function PasswordModal({ onClose }: { onClose: () => void }) {
+  const [pwd, setPwd] = useState("");
+  const [confirm2, setConfirm2] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const mismatch = confirm2 !== "" && pwd !== confirm2;
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!supabase || pwd.length < 6 || pwd !== confirm2) return;
+    setBusy(true);
+    const { error } = await supabase.auth.updateUser({ password: pwd });
+    setBusy(false);
+    setMsg(error ? { ok: false, text: error.message } : { ok: true, text: "Mot de passe modifié." });
+  };
+
+  return (
+    <Modal title="Changer mon mot de passe" onClose={onClose}>
+      {msg?.ok ? (
+        <>
+          <p>{msg.text} Utilise-le pour te connecter sur tes autres appareils.</p>
+          <div className="modal-foot">
+            <button className="primary" onClick={onClose}>
+              Fermer
+            </button>
+          </div>
+        </>
+      ) : (
+        <form onSubmit={submit} className="form-grid">
+          <label className="wide">
+            Nouveau mot de passe (6 caractères minimum)
+            <input type="password" autoComplete="new-password" autoFocus value={pwd} onChange={(e) => setPwd(e.target.value)} />
+          </label>
+          <label className="wide">
+            Confirmer
+            <input type="password" autoComplete="new-password" value={confirm2} onChange={(e) => setConfirm2(e.target.value)} />
+          </label>
+          {(mismatch || msg) && <p className="login-error wide">{mismatch ? "Les deux saisies sont différentes." : msg?.text}</p>}
+          <div className="modal-foot wide">
+            <button type="button" onClick={onClose}>
+              Annuler
+            </button>
+            <button className="primary" type="submit" disabled={busy || pwd.length < 6 || pwd !== confirm2}>
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      )}
+    </Modal>
   );
 }
