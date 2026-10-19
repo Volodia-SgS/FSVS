@@ -18,11 +18,11 @@ pnpm install
 npx vite
 ```
 
+Puis ouvrir http://localhost:5180. Pour tester sans compte ni Supabase : `npx vite --mode offline --port 5181` avec un fichier `.env.offline.local` aux variables vides.
+
 ## Mise en ligne
 
-Hébergé sur Vercel (import du dépôt GitHub, préréglage Vite) avec les variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`. Chaque push sur `main` redéploie.
-
-Puis ouvrir http://localhost:5180. Pour tester sans compte ni Supabase : `npx vite --mode offline --port 5181` avec un fichier `.env.offline.local` aux variables vides.
+Hébergé sur Vercel (import du dépôt GitHub, préréglage Vite) avec les variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`. Adresse : https://fsvs.vercel.app. Chaque push sur `main` redéploie.
 
 ## Réimporter l'Excel
 
