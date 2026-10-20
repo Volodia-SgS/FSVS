@@ -1,9 +1,24 @@
 import { useState } from "react";
 import { Modal } from "../components/Modal";
+import { guessCategory } from "../foodCategories";
 import { fmt, newId, zero } from "../nutrition";
 import { useStore } from "../store";
-import type { Ingredient } from "../types";
-import { NUTRIENTS } from "../types";
+import type { FoodCategoryId, Ingredient } from "../types";
+import { FOOD_CATEGORIES, NUTRIENTS } from "../types";
+
+const categoryOf = (ing: Ingredient) => FOOD_CATEGORIES.find((c) => c.id === (ing.category ?? guessCategory(ing.name)))!;
+
+function CategorySelect({ value, onChange }: { value: FoodCategoryId; onChange: (c: FoodCategoryId) => void }) {
+  return (
+    <select value={value} onChange={(e) => onChange(e.target.value as FoodCategoryId)}>
+      {FOOD_CATEGORIES.map((c) => (
+        <option key={c.id} value={c.id}>
+          {c.icon} {c.label}
+        </option>
+      ))}
+    </select>
+  );
+}
 import { NumberInput } from "./Tracking";
 
 export function Ingredients() {
@@ -33,8 +48,10 @@ export function Ingredients() {
   const remove = (ing: Ingredient) => {
     const used =
       data.recipes.some((r) => r.items.some((it) => it.refId === ing.id)) ||
-      Object.values(data.days).some((es) => es.some((e) => e.kind === "ingredient" && e.refId === ing.id));
-    if (used) return alert("Cet ingrédient est utilisé dans une recette ou un jour du suivi : retire-le d'abord.");
+      [...Object.values(data.days), ...Object.values(data.mealPlans).flatMap((p) => Object.values(p.meals))].some((es) =>
+        es?.some((e) => e.kind === "ingredient" && e.refId === ing.id),
+      );
+    if (used) return alert("Cet ingrédient est utilisé dans une recette, un jour du suivi ou un plan de repas : retire-le d'abord.");
     if (confirm(`Supprimer « ${ing.name} » ?`)) update((d) => void (d.ingredients = d.ingredients.filter((x) => x.id !== ing.id)));
   };
 
@@ -55,6 +72,7 @@ export function Ingredients() {
           <thead>
             <tr>
               <th>Nom</th>
+              <th className="cat">Rayon</th>
               <th>Pour</th>
               {NUTRIENTS.map((n) => (
                 <th key={n.key}>{n.short}</th>
@@ -69,6 +87,9 @@ export function Ingredients() {
                 <tr key={ing.id} className="editing">
                   <td>
                     <input value={ing.name} onChange={(e) => edit(ing.id, (i) => void (i.name = e.target.value))} />
+                  </td>
+                  <td>
+                    <CategorySelect value={categoryOf(ing).id} onChange={(c) => edit(ing.id, (i) => void (i.category = c))} />
                   </td>
                   <td>
                     <select
@@ -107,6 +128,9 @@ export function Ingredients() {
               ) : (
                 <tr key={ing.id} id={ing.id} className={flash === ing.id ? "flash" : ""} onClick={() => setEditing(ing.id)}>
                   <td className="name">{ing.name}</td>
+                  <td className="cat" title={categoryOf(ing).label}>
+                    {categoryOf(ing).icon} {categoryOf(ing).label}
+                  </td>
                   <td>{ing.basis === "portion" ? <span className="tag">{ing.unitLabel || "portion"}</span> : "100 g"}</td>
                   {ing.values.map((v, k) => (
                     <td key={k}>{fmt(v, NUTRIENTS[k].key)}</td>
@@ -145,6 +169,8 @@ function NewIngredientModal({
   onCreate: (ing: Ingredient) => void;
 }) {
   const [draft, setDraft] = useState<Ingredient>(() => ({ id: newId("ing"), name: initialName, basis: "100g", values: zero() }));
+  // Tant que le rayon n'a pas été choisi à la main, on le devine d'après le nom.
+  const category = draft.category ?? guessCategory(draft.name);
   const set = (patch: Partial<Ingredient>) => setDraft((d) => ({ ...d, ...patch }));
   const valid = draft.name.trim() !== "";
 
@@ -153,13 +179,17 @@ function NewIngredientModal({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (valid) onCreate({ ...draft, name: draft.name.trim() });
+          if (valid) onCreate({ ...draft, name: draft.name.trim(), category });
         }}
       >
         <div className="form-grid">
           <label className="wide">
             Nom
             <input autoFocus value={draft.name} onChange={(e) => set({ name: e.target.value })} />
+          </label>
+          <label className="wide">
+            Rayon
+            <CategorySelect value={category} onChange={(c) => set({ category: c })} />
           </label>
           <label>
             Valeurs indiquées pour

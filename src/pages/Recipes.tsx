@@ -28,6 +28,9 @@ export function Recipes() {
     update((d) => {
       d.recipes = d.recipes.filter((r) => r.id !== recipe.id);
       for (const k of Object.keys(d.days)) d.days[k] = d.days[k].filter((e) => !(e.kind === "recipe" && e.refId === recipe.id));
+      for (const plan of Object.values(d.mealPlans))
+        for (const slot of Object.keys(plan.meals) as (keyof typeof plan.meals)[])
+          plan.meals[slot] = plan.meals[slot]!.filter((e) => !(e.kind === "recipe" && e.refId === recipe.id));
     });
     setSelectedId(null);
   };

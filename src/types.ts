@@ -23,7 +23,30 @@ export interface Ingredient {
   unitWeight?: number;
   /** Nom de la portion quand basis = "portion" (scoop, barre…). */
   unitLabel?: string;
+  /** Rayon (voir FOOD_CATEGORIES). */
+  category?: FoodCategoryId;
 }
+
+/** Rayons servant à classer les ingrédients dans le choix d'aliment. */
+export const FOOD_CATEGORIES = [
+  { id: "viande", label: "Viande & charcuterie", icon: "🥩" },
+  { id: "poisson", label: "Poisson", icon: "🐟" },
+  { id: "oeuf", label: "Œufs & tofu", icon: "🥚" },
+  { id: "fromage", label: "Fromage", icon: "🧀" },
+  { id: "laitage", label: "Yaourts & laitages", icon: "🥛" },
+  { id: "feculent", label: "Féculents & légumineuses", icon: "🍚" },
+  { id: "cereales", label: "Céréales du matin", icon: "🥣" },
+  { id: "legume", label: "Légumes", icon: "🥦" },
+  { id: "fruit", label: "Fruits", icon: "🍎" },
+  { id: "graines", label: "Oléagineux & graines", icon: "🥜" },
+  { id: "snack", label: "Snacks & desserts", icon: "🍫" },
+  { id: "matiere", label: "Matières grasses & sauces", icon: "🫒" },
+  { id: "epicerie", label: "Épicerie", icon: "🧂" },
+  { id: "complement", label: "Compléments", icon: "💪" },
+  { id: "autre", label: "Autres", icon: "🍽️" },
+] as const;
+
+export type FoodCategoryId = (typeof FOOD_CATEGORIES)[number]["id"];
 
 export type Unit = "g" | "unit" | "portion";
 
@@ -67,8 +90,6 @@ export interface Category {
   color: string;
 }
 
-/** Catégorie réservée aux repas planifiés (aliments + quantités). */
-export const MEAL_CATEGORY = "repas";
 
 export interface ScheduleEvent {
   id: string;
@@ -79,15 +100,28 @@ export interface ScheduleEvent {
   end: string;
   title: string;
   categoryId: string;
-  /** Repas planifié : aliments prévus. */
-  foods?: Entry[];
-  /** Repas planifié déjà reporté dans le suivi nutrition. */
-  eaten?: boolean;
 }
 
 export interface Schedule {
   categories: Category[];
   events: ScheduleEvent[];
+}
+
+/** Les repas d'une journée, dans l'ordre d'affichage. */
+export const MEAL_SLOTS = [
+  { id: "petitdej", label: "Petit déjeuner", icon: "☕" },
+  { id: "dejeuner", label: "Déjeuner", icon: "🍽️" },
+  { id: "collation", label: "Collation", icon: "🍌" },
+  { id: "diner", label: "Dîner", icon: "🌙" },
+] as const;
+
+export type MealSlot = (typeof MEAL_SLOTS)[number]["id"];
+
+/** Plan de repas d'un jour : aliments prévus par repas. */
+export interface MealPlan {
+  meals: Partial<Record<MealSlot, Entry[]>>;
+  /** Repas déjà reportés dans le suivi nutrition. */
+  done?: MealSlot[];
 }
 
 export interface AppData {
@@ -97,5 +131,7 @@ export interface AppData {
   recipes: Recipe[];
   /** Clé = date ISO (AAAA-MM-JJ). */
   days: Record<string, Entry[]>;
+  /** Clé = date ISO (AAAA-MM-JJ). */
+  mealPlans: Record<string, MealPlan>;
   objectives: Record<NutrientKey, Objective>;
 }

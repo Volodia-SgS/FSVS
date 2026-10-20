@@ -1,16 +1,25 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { FoodGridModal } from "../components/FoodGridModal";
+import { useMemo, useState } from "react";
+import { MealPlanEditor, planTotal } from "../components/MealPlan";
 import { Modal } from "../components/Modal";
 import { shiftDate, toHhmm, todayIso, toMinutes, weekStart } from "../dates";
-import { dayTotal, fmt, newId } from "../nutrition";
+import { fmt, newId } from "../nutrition";
 import { useStore } from "../store";
-import type { Category, Entry, ScheduleEvent } from "../types";
-import { MEAL_CATEGORY } from "../types";
-import { EntryRow } from "./Tracking";
+import type { Category, ScheduleEvent } from "../types";
+import { longDate } from "./Tracking";
 
 const HOUR_PX = 48;
 const SNAP_MIN = 15;
-const FIRST_VISIBLE_HOUR = 7;
+/** Plage affichée : la nuit ne sert à rien. */
+const START_HOUR = 6;
+const END_HOUR = 24;
+const START_MIN = START_HOUR * 60;
+const GRID_PX = (END_HOUR - START_HOUR) * HOUR_PX;
+
+/** Blocs qu'on ajoute souvent, en un clic. */
+const PRESETS = [{ title: "Temps partiel", start: "09:30", end: "17:30", categoryId: "travail" }];
+
+/** Catégorie d'un préréglage, ou la première si elle a été supprimée. */
+const presetCategory = (cats: Category[], id: string) => (cats.find((c) => c.id === id) ?? cats[0]).id;
 
 const dayHeader = (iso: string) => {
   const d = new Date(iso + "T12:00:00");
@@ -62,15 +71,11 @@ export function Schedule() {
   const { data } = useStore();
   const [monday, setMonday] = useState(() => weekStart(todayIso()));
   const [draft, setDraft] = useState<Draft | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [openDay, setOpenDay] = useState<string | null>(null);
   const today = todayIso();
   const days = Array.from({ length: 7 }, (_, i) => shiftDate(monday, i));
   const cats = data.schedule.categories;
   const catOf = (id: string) => cats.find((c) => c.id === id) ?? cats[0];
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = FIRST_VISIBLE_HOUR * HOUR_PX;
-  }, []);
 
   const byDay = useMemo(() => {
     const m = new Map<string, ScheduleEvent[]>();
@@ -116,23 +121,31 @@ export function Schedule() {
         </button>
       </header>
 
-      <div className="week-scroll" ref={scrollRef}>
+      <div className="week-scroll">
         <div className="week-grid">
           <div className="week-corner" />
           {days.map((d) => {
             const h = dayHeader(d);
+            const planned = !!data.mealPlans[d];
             return (
               <div key={d} className={"week-day-head" + (d === today ? " today" : "")}>
                 <span>{h.weekday}</span>
                 <b>{h.day}</b>
+                <button
+                  className={"day-plan" + (planned ? " planned" : "")}
+                  onClick={() => setOpenDay(d)}
+                  title={planned ? `${fmt(planTotal(data, d)[0], "kcal")} kcal prévues` : "Repas et ajouts rapides du jour"}
+                >
+                  {planned ? "Modifier le plan" : "+ Planifier"}
+                </button>
               </div>
             );
           })}
 
-          <div className="week-hours" style={{ height: 24 * HOUR_PX }}>
-            {Array.from({ length: 24 }, (_, h) => (
-              <span key={h} style={{ top: h * HOUR_PX }}>
-                {h ? `${h}h` : ""}
+          <div className="week-hours" style={{ height: GRID_PX }}>
+            {Array.from({ length: END_HOUR - START_HOUR }, (_, i) => (
+              <span key={i} className={i ? "" : "first"} style={{ top: i * HOUR_PX }}>
+                {START_HOUR + i}h
               </span>
             ))}
           </div>
@@ -143,26 +156,26 @@ export function Schedule() {
               <div
                 key={d}
                 className={"week-col" + (d === today ? " today" : "")}
-                style={{ height: 24 * HOUR_PX, backgroundSize: `100% ${HOUR_PX}px` }}
+                style={{ height: GRID_PX, backgroundSize: `100% ${HOUR_PX}px` }}
                 onClick={(e) => {
                   if (e.target !== e.currentTarget) return;
                   const y = e.clientY - e.currentTarget.getBoundingClientRect().top;
-                  createAt(d, (y / HOUR_PX) * 60);
+                  createAt(d, START_MIN + (y / HOUR_PX) * 60);
                 }}
               >
-                {d === today && <div className="now-line" style={{ top: (nowMin / 60) * HOUR_PX }} />}
+                {d === today && nowMin >= START_MIN && <div className="now-line" style={{ top: ((nowMin - START_MIN) / 60) * HOUR_PX }} />}
                 {events.map((ev) => {
-                  const s = toMinutes(ev.start);
+                  // Ce qui commence avant 6 h est ramené en haut de la grille.
+                  const s = Math.max(toMinutes(ev.start), START_MIN);
                   const len = Math.max(toMinutes(ev.end) - s, SNAP_MIN);
                   const p = pos.get(ev.id)!;
                   const c = catOf(ev.categoryId);
-                  const kcal = ev.foods?.length ? dayTotal(data, ev.foods)[0] : null;
                   return (
                     <button
                       key={ev.id}
-                      className={"event" + (len < 45 ? " short" : "") + (ev.eaten ? " eaten" : "")}
+                      className={"event" + (len < 45 ? " short" : "")}
                       style={{
-                        top: (s / 60) * HOUR_PX,
+                        top: ((s - START_MIN) / 60) * HOUR_PX,
                         height: (len / 60) * HOUR_PX - 2,
                         left: `calc(${(p.col / p.cols) * 100}% + 2px)`,
                         width: `calc(${100 / p.cols}% - 4px)`,
@@ -174,7 +187,6 @@ export function Schedule() {
                       <span className="event-title">{ev.title}</span>
                       <span className="event-time">
                         {ev.start}–{ev.end}
-                        {kcal != null && ` · ${fmt(kcal, "kcal")} kcal`}
                       </span>
                     </button>
                   );
@@ -186,32 +198,23 @@ export function Schedule() {
       </div>
 
       {draft && <EventModal draft={draft} categories={cats} onClose={() => setDraft(null)} />}
+      {openDay && <DayModal date={openDay} onClose={() => setOpenDay(null)} />}
     </section>
   );
 }
 
 function EventModal({ draft: initial, categories, onClose }: { draft: Draft; categories: Category[]; onClose: () => void }) {
-  const { data, update } = useStore();
+  const { update } = useStore();
   const [draft, setDraft] = useState<Draft>(initial);
-  const [pickerOpen, setPickerOpen] = useState(false);
   const set = (patch: Partial<Draft>) => setDraft((d) => ({ ...d, ...patch }));
-  const isMeal = draft.categoryId === MEAL_CATEGORY;
-  const foods = draft.foods ?? [];
-  const total = dayTotal(data, foods);
   const timeOk = toMinutes(draft.end) > toMinutes(draft.start);
-  const title = draft.title.trim() || (isMeal ? "Repas" : "");
+  const title = draft.title.trim();
   const valid = !!title && !!draft.date && timeOk;
 
   const save = (e: React.FormEvent) => {
     e.preventDefault();
     if (!valid) return;
-    const ev: ScheduleEvent = {
-      ...draft,
-      id: draft.id ?? newId("ev"),
-      title,
-      foods: isMeal ? foods : undefined,
-      eaten: isMeal ? draft.eaten : undefined,
-    };
+    const ev: ScheduleEvent = { ...draft, id: draft.id ?? newId("ev"), title };
     update((d) => {
       const i = d.schedule.events.findIndex((x) => x.id === ev.id);
       if (i >= 0) d.schedule.events[i] = ev;
@@ -229,12 +232,27 @@ function EventModal({ draft: initial, categories, onClose }: { draft: Draft; cat
   return (
     <Modal title={draft.id ? "Modifier l'item" : "Nouvel item"} onClose={onClose}>
       <form onSubmit={save}>
+        {!draft.id && (
+          <div className="presets">
+            <span className="muted small">Préremplir :</span>
+            {PRESETS.map((p) => (
+              <button
+                key={p.title}
+                type="button"
+                className="small"
+                onClick={() => set({ ...p, categoryId: presetCategory(categories, p.categoryId) })}
+              >
+                {p.title} {p.start.replace(":", "h")}–{p.end.replace(":", "h")}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="form-grid">
           <label className="wide">
             Nom
             <input
               autoFocus
-              placeholder={isMeal ? "Repas (ex. Déjeuner)" : "ex. Footing, Réunion…"}
+              placeholder="ex. Footing, Réunion…"
               value={draft.title}
               onChange={(e) => set({ title: e.target.value })}
             />
@@ -271,34 +289,6 @@ function EventModal({ draft: initial, categories, onClose }: { draft: Draft; cat
           {!timeOk && <p className="login-error wide">L'heure de fin doit être après l'heure de début.</p>}
         </div>
 
-        {isMeal && (
-          <>
-            <h3>Aliments prévus</h3>
-            {foods.length === 0 && <p className="muted small">Aucun aliment pour l'instant.</p>}
-            <ul className="entries">
-              {foods.map((f) => (
-                <EntryRow
-                  key={f.id}
-                  entry={f}
-                  onChange={(next) => set({ foods: foods.map((x) => (x.id === f.id ? next : x)) })}
-                  onDelete={() => set({ foods: foods.filter((x) => x.id !== f.id) })}
-                />
-              ))}
-            </ul>
-            {foods.length > 0 && (
-              <p className="small">
-                Total : <b>{fmt(total[0], "kcal")} kcal</b> · P {fmt(total[1])} g · G {fmt(total[2])} g · L {fmt(total[4])} g
-              </p>
-            )}
-            <button type="button" className="add-food" onClick={() => setPickerOpen(true)}>
-              + Ajouter un aliment
-            </button>
-            <p className="muted small">
-              Le jour venu, ce repas apparaît dans Nutrition › Suivi avec un bouton pour l'ajouter à ce que tu as mangé.
-            </p>
-          </>
-        )}
-
         <div className="modal-foot">
           {draft.id && (
             <button type="button" className="ghost danger" onClick={remove} style={{ marginRight: "auto" }}>
@@ -313,12 +303,36 @@ function EventModal({ draft: initial, categories, onClose }: { draft: Draft; cat
           </button>
         </div>
       </form>
-      {pickerOpen && (
-        <FoodGridModal
-          onClose={() => setPickerOpen(false)}
-          onAdd={(p) => setDraft((d) => ({ ...d, foods: [...(d.foods ?? []), { ...p, id: newId("e") } as Entry] }))}
-        />
-      )}
+    </Modal>
+  );
+}
+
+/** Une journée : ajouts rapides à l'agenda et plan de repas. */
+function DayModal({ date, onClose }: { date: string; onClose: () => void }) {
+  const { data, update } = useStore();
+  const cats = data.schedule.categories;
+  const events = data.schedule.events.filter((e) => e.date === date);
+
+  const addPreset = (p: (typeof PRESETS)[number]) =>
+    update((d) => void d.schedule.events.push({ ...p, id: newId("ev"), date, categoryId: presetCategory(cats, p.categoryId) }));
+  const title = longDate(date);
+
+  return (
+    <Modal title={title.charAt(0).toUpperCase() + title.slice(1)} onClose={onClose} wide>
+      <div className="presets">
+        <span className="muted small">Ajout rapide :</span>
+        {PRESETS.map((p) => {
+          const exists = events.some((e) => e.title === p.title && e.start === p.start && e.end === p.end);
+          return (
+            <button key={p.title} className="small" disabled={exists} onClick={() => addPreset(p)}>
+              {exists ? "✓ " : "+ "}
+              {p.title} {p.start.replace(":", "h")}–{p.end.replace(":", "h")}
+            </button>
+          );
+        })}
+      </div>
+      <h2 className="meal-plan-title">Plan de repas</h2>
+      <MealPlanEditor date={date} />
     </Modal>
   );
 }

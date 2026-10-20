@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { FoodGridModal } from "../components/FoodGridModal";
+import { Macros, MealPlanEditor } from "../components/MealPlan";
+import { Modal } from "../components/Modal";
 import { add, dayTotal, entryValues, fmt, levelFor, newId, scale, unitLabel, unitsFor, zero } from "../nutrition";
 import { shiftDate, todayIso } from "../dates";
 import { useStore } from "../store";
 import type { Entry, Unit, Values } from "../types";
-import { MEAL_CATEGORY, NUTRIENTS } from "../types";
+import { MEAL_SLOTS, NUTRIENTS } from "../types";
 
-const longDate = (iso: string) =>
+export const longDate = (iso: string) =>
   new Date(iso + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
 const shortDate = (iso: string) =>
@@ -122,10 +124,10 @@ function DayEditor({ date, setDate }: { date: string; setDate: (d: string) => vo
   );
 }
 
-function Summary({ total }: { total: Values }) {
+export function Summary({ total, className }: { total: Values; className?: string }) {
   const { data } = useStore();
   return (
-    <div className="summary">
+    <div className={"summary " + (className ?? "")}>
       {NUTRIENTS.map((n, i) => {
         const obj = data.objectives[n.key];
         const v = total[i];
@@ -322,48 +324,60 @@ function Cell({ value, nkey }: { value: number; nkey: (typeof NUTRIENTS)[number]
   return <td className={level ? "lv-" + level : ""}>{fmt(value, nkey)}</td>;
 }
 
-/** Repas planifiés dans l'emploi du temps pour ce jour, à reporter dans le suivi. */
+/** Plan de repas du jour : chaque repas peut être reporté dans le suivi. */
 function PlannedMeals({ date, onEat }: { date: string; onEat: (foods: Entry[]) => void }) {
   const { data, update } = useStore();
-  const meals = data.schedule.events
-    .filter((e) => e.date === date && e.categoryId === MEAL_CATEGORY && e.foods?.length)
-    .sort((a, b) => a.start.localeCompare(b.start));
-  if (!meals.length) return null;
+  const [editing, setEditing] = useState(false);
+  const plan = data.mealPlans[date];
+  const slots = MEAL_SLOTS.filter((s) => plan?.meals[s.id]?.length);
 
   return (
     <>
-      <h3>Repas prévus</h3>
-      <ul className="planned">
-        {meals.map((m) => {
-          const v = dayTotal(data, m.foods!);
-          return (
-            <li key={m.id} className={m.eaten ? "done" : ""}>
-              <div>
-                <span className="planned-time">{m.start}</span> <b>{m.title}</b>
-                <div className="muted small">
-                  {fmt(v[0], "kcal")} kcal · P {fmt(v[1])} · G {fmt(v[2])} · L {fmt(v[4])}
+      <div className="section-head">
+        <h3>Repas prévus</h3>
+        <button className="link small" onClick={() => setEditing(true)}>
+          {slots.length ? "Modifier le plan" : "+ Planifier les repas"}
+        </button>
+      </div>
+      {slots.length > 0 && (
+        <ul className="planned">
+          {slots.map((s) => {
+            const foods = plan!.meals[s.id]!;
+            const done = plan!.done?.includes(s.id);
+            return (
+              <li key={s.id} className={done ? "done" : ""}>
+                <div>
+                  <span aria-hidden>{s.icon}</span> <b>{s.label}</b>
+                  <div className="muted small">
+                    <Macros v={dayTotal(data, foods)} />
+                  </div>
                 </div>
-              </div>
-              {m.eaten ? (
-                <span className="muted small">✓ dans le suivi</span>
-              ) : (
-                <button
-                  className="small"
-                  onClick={() => {
-                    onEat(m.foods!);
-                    update((d) => {
-                      const ev = d.schedule.events.find((x) => x.id === m.id);
-                      if (ev) ev.eaten = true;
-                    });
-                  }}
-                >
-                  Ajouter au suivi
-                </button>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+                {done ? (
+                  <span className="muted small">✓ dans le suivi</span>
+                ) : (
+                  <button
+                    className="small"
+                    onClick={() => {
+                      onEat(foods);
+                      update((d) => {
+                        const p = d.mealPlans[date];
+                        if (p) p.done = [...(p.done ?? []), s.id];
+                      });
+                    }}
+                  >
+                    Ajouter au suivi
+                  </button>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {editing && (
+        <Modal title={`Repas du ${longDate(date)}`} onClose={() => setEditing(false)} wide>
+          <MealPlanEditor date={date} />
+        </Modal>
+      )}
     </>
   );
 }

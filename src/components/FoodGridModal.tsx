@@ -1,12 +1,15 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
+import { guessCategory } from "../foodCategories";
 import { defaultUnit, fmt, recipeValues, unitLabel, unitsFor } from "../nutrition";
 import { useStore } from "../store";
 import type { Unit } from "../types";
+import { FOOD_CATEGORIES } from "../types";
 import type { Pick } from "./FoodPicker";
 import { Modal } from "./Modal";
 
 interface Card {
   id: string;
+  group: string;
   kind: "ingredient" | "recipe";
   name: string;
   kcal: number;
@@ -20,13 +23,26 @@ const norm = (s: string) =>
     .replace(/[̀-ͯ]/g, "")
     .toUpperCase();
 
-const letterOf = (name: string) => {
-  const c = norm(name.trim()).charAt(0);
-  return c >= "A" && c <= "Z" ? c : "#";
-};
+/** Rubriques du choix : les recettes d'abord, puis les rayons. */
+const GROUPS = [{ id: "recette", label: "Mes recettes", icon: "⭐" }, ...FOOD_CATEGORIES];
 
-/** Choix d'un aliment : cartes classées par lettre, puis quantité. */
-export function FoodGridModal({ onAdd, onClose }: { onAdd: (p: Pick) => void; onClose: () => void }) {
+/** Choix d'un aliment : cartes classées par rayon, puis quantité. */
+export function FoodGridModal({
+  onAdd,
+  onClose,
+  title = "Ajouter un aliment",
+  left,
+  right,
+  compact,
+}: {
+  onAdd: (p: Pick) => void;
+  onClose: () => void;
+  title?: string;
+  /** Panneaux latéraux (grand écran) et leur résumé d'une ligne (petit écran). */
+  left?: ReactNode;
+  right?: ReactNode;
+  compact?: ReactNode;
+}) {
   const { data } = useStore();
   const [q, setQ] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -40,6 +56,7 @@ export function FoodGridModal({ onAdd, onClose }: { onAdd: (p: Pick) => void; on
       ...data.ingredients.map((i) => ({
         id: i.id,
         kind: "ingredient" as const,
+        group: i.category ?? guessCategory(i.name),
         name: i.name,
         kcal: i.values[0],
         prot: i.values[1],
@@ -47,16 +64,12 @@ export function FoodGridModal({ onAdd, onClose }: { onAdd: (p: Pick) => void; on
       })),
       ...data.recipes.map((r) => {
         const v = recipeValues(data, r);
-        return { id: r.id, kind: "recipe" as const, name: r.name, kcal: v[0], prot: v[1], per: "/ repas" };
+        return { id: r.id, kind: "recipe" as const, group: "recette", name: r.name, kcal: v[0], prot: v[1], per: "/ repas" };
       }),
     ];
     const nq = norm(q.trim());
-    const map = new Map<string, Card[]>();
-    for (const c of cards.filter((c) => norm(c.name).includes(nq)).sort((a, b) => a.name.localeCompare(b.name, "fr"))) {
-      const l = letterOf(c.name);
-      map.set(l, [...(map.get(l) ?? []), c]);
-    }
-    return [...map.entries()].sort(([a], [b]) => (a === "#" ? 1 : b === "#" ? -1 : a.localeCompare(b)));
+    const shown = cards.filter((c) => norm(c.name).includes(nq)).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    return GROUPS.map((g) => ({ ...g, cards: shown.filter((c) => c.group === g.id) })).filter((g) => g.cards.length);
   }, [data, q]);
 
   const ing = data.ingredients.find((i) => i.id === selectedId);
@@ -86,17 +99,18 @@ export function FoodGridModal({ onAdd, onClose }: { onAdd: (p: Pick) => void; on
   };
 
   return (
-    <Modal title="Ajouter un aliment" onClose={onClose} wide>
+    <Modal title={title} onClose={onClose} wide left={left} right={right}>
+      {compact != null && <div className="picker-compact small">{compact}</div>}
       <div className="grid-tools">
         <input autoFocus placeholder="Filtrer…" value={q} onChange={(e) => setQ(e.target.value)} />
-        <nav className="letters">
-          {groups.map(([l]) => (
+        <nav className="group-nav">
+          {groups.map((g) => (
             <button
-              key={l}
-              className="ghost small"
-              onClick={() => document.getElementById("letter-" + l)?.scrollIntoView({ block: "start" })}
+              key={g.id}
+              className="small"
+              onClick={() => document.getElementById("group-" + g.id)?.scrollIntoView({ block: "start" })}
             >
-              {l}
+              <span aria-hidden>{g.icon}</span> {g.label}
             </button>
           ))}
         </nav>
@@ -104,11 +118,13 @@ export function FoodGridModal({ onAdd, onClose }: { onAdd: (p: Pick) => void; on
 
       <div className="food-groups">
         {groups.length === 0 && <p className="muted">Aucun aliment ne correspond.</p>}
-        {groups.map(([letter, cards]) => (
-          <section key={letter} id={"letter-" + letter} className="food-group">
-            <h3>{letter}</h3>
+        {groups.map((g) => (
+          <section key={g.id} id={"group-" + g.id} className="food-group">
+            <h3>
+              <span aria-hidden>{g.icon}</span> {g.label}
+            </h3>
             <div className="food-cards">
-              {cards.map((c) => (
+              {g.cards.map((c) => (
                 <button
                   key={c.id}
                   className={"food-card" + (c.id === selectedId ? " selected" : "") + (c.kind === "recipe" ? " recipe" : "")}

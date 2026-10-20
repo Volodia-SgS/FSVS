@@ -3,7 +3,8 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import renames from "./renames.json";
 import seed from "./seed.json";
 import { supabase } from "./supabase";
-import { MEAL_CATEGORY, type AppData } from "./types";
+import { guessCategory } from "./foodCategories";
+import type { AppData, Entry, MealSlot } from "./types";
 
 const STORAGE_KEY = "nutrition-data-v1";
 const SYNC_KEY = "nutrition-sync-v1";
@@ -35,10 +36,31 @@ function migrate(data: AppData): AppData {
         categories: [
           { id: "loisir", label: "Loisir", color: "#6aa84f" },
           { id: "travail", label: "Travail", color: "#e69138" },
-          { id: MEAL_CATEGORY, label: "Repas", color: "#3d85c6" },
+          { id: "repas", label: "Repas", color: "#3d85c6" },
         ],
         events: [],
       },
+    };
+  }
+  // v5 : rayons des ingrédients, et les repas planifiés dans l'agenda deviennent des plans de repas par jour.
+  if (data.version < 5) {
+    const mealPlans: AppData["mealPlans"] = { ...(data.mealPlans ?? {}) };
+    type OldEvent = AppData["schedule"]["events"][number] & { foods?: Entry[]; eaten?: boolean };
+    const events = (data.schedule.events as OldEvent[]).filter((ev) => {
+      if (!ev.foods?.length) return true;
+      const m = Number(ev.start.slice(0, 2)) * 60 + Number(ev.start.slice(3, 5));
+      const slot: MealSlot = m < 10.5 * 60 ? "petitdej" : m < 15 * 60 ? "dejeuner" : m < 18.5 * 60 ? "collation" : "diner";
+      const plan = (mealPlans[ev.date] ??= { meals: {} });
+      plan.meals[slot] = [...(plan.meals[slot] ?? []), ...ev.foods];
+      if (ev.eaten && !plan.done?.includes(slot)) plan.done = [...(plan.done ?? []), slot];
+      return false;
+    });
+    data = {
+      ...data,
+      version: 5,
+      mealPlans,
+      schedule: { ...data.schedule, events: events.map(({ foods: _f, eaten: _e, ...ev }) => ev) },
+      ingredients: data.ingredients.map((i) => (i.category ? i : { ...i, category: guessCategory(i.name) })),
     };
   }
   return data;

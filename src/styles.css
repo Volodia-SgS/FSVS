@@ -461,6 +461,10 @@ table.grid {
 .grid.ingredients tbody tr:not(.editing):hover {
   background: var(--hover);
 }
+.grid.ingredients .cat {
+  text-align: left;
+  white-space: nowrap;
+}
 .grid.ingredients td.name,
 .grid.objectives td.name {
   font-weight: 500;
@@ -677,15 +681,98 @@ label.inline {
   flex-direction: column;
   gap: 8px;
 }
-.letters {
+.group-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
+  gap: 6px;
 }
-.letters button {
-  padding: 2px 7px;
+.group-nav button {
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Panneaux autour du choix d'aliment (plan de repas) */
+.modal-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  width: min(1560px, 100%);
+}
+.modal-row .modal.wide {
+  flex: 0 1 1000px;
+  min-width: 0;
+}
+.modal-side {
+  flex: 0 0 250px;
+  height: 86vh;
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.25);
+}
+.modal-side:last-child {
+  flex-basis: 290px;
+}
+.modal-side h3 {
+  margin-top: 0;
+}
+.summary.vertical {
+  grid-template-columns: 1fr;
+  margin-top: 0;
+}
+.summary.vertical .stat-value {
+  font-size: 17px;
+}
+.meals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.meals-table th,
+.meals-table td {
+  padding: 6px 4px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+.meals-table th:first-child,
+.meals-table td:first-child {
+  text-align: left;
+}
+.meals-table th {
+  color: var(--muted);
   font-weight: 600;
+}
+.meals-table tr.current td {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  font-weight: 600;
+}
+.meals-table tr.total td {
+  font-weight: 700;
+  border-top: 2px solid var(--border);
+}
+.meals-table tr.rest td {
   color: var(--accent);
+  font-weight: 600;
+  border-bottom: 0;
+}
+.picker-compact {
+  display: none;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--hover);
+}
+@media (max-width: 1150px) {
+  .modal-side {
+    display: none;
+  }
+  .picker-compact {
+    display: block;
+  }
 }
 .food-groups {
   flex: 1;
@@ -989,10 +1076,39 @@ label.inline {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6px 0;
+  gap: 0;
+  padding: 6px 4px;
   font-size: 12px;
   color: var(--muted);
   text-transform: capitalize;
+}
+.day-plan {
+  margin-top: 5px;
+  padding: 3px 10px;
+  max-width: 100%;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s, color 0.15s;
+}
+.day-plan:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+.day-plan.planned {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.day-plan.planned:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 80%, var(--text));
 }
 .week-day-head b {
   font-size: 18px;
@@ -1019,6 +1135,9 @@ label.inline {
   transform: translateY(-50%);
   font-size: 11px;
   color: var(--muted);
+}
+.week-hours span.first {
+  transform: none;
 }
 .week-col {
   position: relative;
@@ -1096,8 +1215,53 @@ label.inline {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.event.eaten .event-title::after {
-  content: " ✓";
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* ---- Plan de repas */
+.meal-plan-title {
+  margin: 4px 0 10px;
+  font-size: 17px;
+}
+.meal-plan {
+  overflow-y: auto;
+  margin: 0 -6px;
+  padding: 0 6px;
+}
+.meal-slot {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.meal-slot > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+.meal-slot h3 {
+  margin: 0;
+  font-size: 15px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.meal-slot .add-food {
+  padding: 6px;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
 }
 .cat-choice {
   display: flex;
