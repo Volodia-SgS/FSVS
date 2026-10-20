@@ -132,7 +132,7 @@ export function Schedule() {
                 <span>{h.weekday}</span>
                 <b>{h.day}</b>
                 <button
-                  className={"day-plan" + (planned ? " planned" : "")}
+                  className={"day-plan" + (planned ? " has-plan" : "")}
                   onClick={() => setOpenDay(d)}
                   title={planned ? `${fmt(planTotal(data, d)[0], "kcal")} kcal prévues` : "Repas et ajouts rapides du jour"}
                 >

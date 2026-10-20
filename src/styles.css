@@ -1083,31 +1083,30 @@ label.inline {
   text-transform: capitalize;
 }
 .day-plan {
-  margin-top: 5px;
-  padding: 3px 10px;
+  margin-top: 6px;
+  padding: 5px 12px;
   max-width: 100%;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
   background: color-mix(in srgb, var(--accent) 8%, var(--card));
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
+  line-height: 1.2;
   text-transform: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: center;
   transition: background 0.15s, color 0.15s;
 }
 .day-plan:hover:not(:disabled) {
   background: var(--accent);
   color: var(--accent-text);
 }
-.day-plan.planned {
+.day-plan.has-plan {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-text);
 }
-.day-plan.planned:hover:not(:disabled) {
+.day-plan.has-plan:hover:not(:disabled) {
   background: color-mix(in srgb, var(--accent) 80%, var(--text));
 }
 .week-day-head b {
