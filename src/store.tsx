@@ -11,6 +11,9 @@ const SYNC_KEY = "nutrition-sync-v1";
 const PUSH_DELAY_MS = 800;
 const PULL_INTERVAL_MS = 60_000;
 
+/** Type d'item de l'agenda utilisé par défaut pour les tâches planifiées. */
+export const TASK_CATEGORY = { id: "tache", label: "Tâche", color: "#8e7cc3" };
+
 export const seedData = (): AppData => migrate(structuredClone(seed) as unknown as AppData);
 
 function migrate(data: AppData): AppData {
@@ -62,6 +65,13 @@ function migrate(data: AppData): AppData {
       schedule: { ...data.schedule, events: events.map(({ foods: _f, eaten: _e, ...ev }) => ev) },
       ingredients: data.ingredients.map((i) => (i.category ? i : { ...i, category: guessCategory(i.name) })),
     };
+  }
+  // v6 : liste de tâches, planifiables dans l'agenda avec leur propre type.
+  if (data.version < 6) {
+    const categories = data.schedule.categories.some((c) => c.id === TASK_CATEGORY.id)
+      ? data.schedule.categories
+      : [...data.schedule.categories, TASK_CATEGORY];
+    data = { ...data, version: 6, tasks: data.tasks ?? [], schedule: { ...data.schedule, categories } };
   }
   return data;
 }

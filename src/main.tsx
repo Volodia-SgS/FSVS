@@ -5,6 +5,7 @@ import { Login } from "./pages/Login";
 import { Objectives } from "./pages/Objectives";
 import { Recipes } from "./pages/Recipes";
 import { Schedule } from "./pages/Schedule";
+import { Tasks } from "./pages/Tasks";
 import { Tracking } from "./pages/Tracking";
 import { StoreProvider, useStore, type SyncStatus } from "./store";
 import { supabase } from "./supabase";
@@ -38,6 +39,7 @@ const SECTIONS: Section[] = [
     ],
   },
   { id: "agenda", label: "Emploi du temps", icon: "📅", tabs: [{ id: "semaine", label: "Semaine", el: <Schedule /> }] },
+  { id: "taches", label: "Tâches", icon: "✅", tabs: [{ id: "liste", label: "À faire", el: <Tasks /> }] },
   { id: "projets", label: "Projets", icon: "🗂️", tabs: [{ id: "accueil", label: "Projets", el: <ComingSoon name="Projets" /> }] },
   { id: "finance", label: "Finance", icon: "💶", tabs: [{ id: "accueil", label: "Finance", el: <ComingSoon name="Finance" /> }] },
 ];

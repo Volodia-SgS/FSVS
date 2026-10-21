@@ -1222,6 +1222,263 @@ label.inline {
   margin-bottom: 12px;
 }
 
+/* ---- Tâches */
+.tasks {
+  max-width: 820px;
+  width: 100%;
+  margin: 0 auto;
+}
+.tasks-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+.quick-add {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 320px;
+}
+.quick-add input {
+  flex: 1;
+  min-width: 0;
+}
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px;
+}
+.seg button {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.seg button.active {
+  background: var(--hover);
+  font-weight: 600;
+}
+.task-group h3 {
+  margin: 18px 0 6px;
+  font-size: 13px;
+}
+.task-group.late h3 {
+  color: var(--danger);
+}
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border-left: 3px solid var(--cat);
+  background: color-mix(in srgb, var(--cat) 6%, var(--card));
+}
+.task:hover {
+  background: color-mix(in srgb, var(--cat) 12%, var(--card));
+}
+.task-check {
+  width: 18px;
+  height: 18px;
+  margin-top: 8px;
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.task-main {
+  flex: 1;
+  min-width: 0;
+}
+.task-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: var(--text);
+}
+.task-body:hover:not(:disabled) {
+  background: none;
+}
+.task-title {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.task.done .task-title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.task-meta:empty {
+  display: none;
+}
+.task-meta .late {
+  color: var(--danger);
+  font-weight: 600;
+}
+.planned-chip {
+  color: var(--text);
+}
+.task-subs {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.task-subs label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.task-subs input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+.task-subs li.done label {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.task-notes {
+  margin: 0 0 8px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.task-prio {
+  margin-top: 9px;
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cat);
+}
+.empty {
+  text-align: center;
+  padding: 32px 0;
+}
+.repeat-row,
+.slot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  color: var(--text);
+}
+.subtasks {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+}
+.subtasks li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.subtasks li input:not([type="checkbox"]) {
+  flex: 1;
+  border-color: transparent;
+  background: transparent;
+  padding-left: 4px;
+}
+.subtasks li input.done {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.subtasks li input:not([type="checkbox"]):focus {
+  border-color: var(--border);
+}
+
+/* ---- Tâches dans l'agenda */
+.task-tray {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin: -4px 0 6px;
+  padding: 2px 6px;
+  border: 2px dashed transparent;
+  border-radius: 10px;
+}
+.tray-task {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 240px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border-left: 3px solid var(--cat);
+  font-size: 12px;
+  cursor: grab;
+}
+.tray-task span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-tray.droppable {
+  border-color: var(--border);
+}
+.task-tray.over {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.week-col.drop-target {
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.drop-preview {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  z-index: 2;
+  border: 2px dashed var(--accent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 1px 4px;
+  pointer-events: none;
+}
+.event.task-event .event-title::before {
+  content: "☐ ";
+}
+.event.task-event.done .event-title::before {
+  content: "☑ ";
+}
+.event.task-event.done {
+  opacity: 0.55;
+}
+.event.task-event.done .event-title {
+  text-decoration: line-through;
+}
+
 /* ---- Plan de repas */
 .meal-plan-title {
   margin: 4px 0 10px;
@@ -1335,7 +1592,7 @@ label.inline {
     bottom: 0;
     z-index: 10;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0;
     padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
     background: var(--card);
