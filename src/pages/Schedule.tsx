@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import { MealPlanEditor, planTotal } from "../components/MealPlan";
 import { Modal } from "../components/Modal";
+import { TaskModal } from "../components/TaskModal";
 import { shiftDate, toHhmm, todayIso, toMinutes, weekStart } from "../dates";
 import { fmt, newId } from "../nutrition";
 import { useStore } from "../store";
-import type { Category, ScheduleEvent } from "../types";
+import { compareTasks, DEFAULT_DURATION, priorityOf, scheduleTask, unscheduleTask } from "../tasks";
+import type { Category, ScheduleEvent, Task } from "../types";
 import { longDate } from "./Tracking";
 
 const HOUR_PX = 48;
@@ -67,10 +69,25 @@ function layout(events: ScheduleEvent[]) {
 
 type Draft = Omit<ScheduleEvent, "id"> & { id?: string };
 
+/** Ce qu'on est en train de glisser sur la grille. */
+interface Drag {
+  kind: "task" | "event";
+  id: string;
+  /** Tâche liée, pour pouvoir la renvoyer dans « À planifier ». */
+  taskId?: string;
+  length: number;
+  /** Écart entre le haut de l'item et le point saisi. */
+  offsetMin: number;
+}
+
 export function Schedule() {
-  const { data } = useStore();
+  const { data, update } = useStore();
   const [monday, setMonday] = useState(() => weekStart(todayIso()));
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [openTask, setOpenTask] = useState<Task | null>(null);
+  const [drag, setDrag] = useState<Drag | null>(null);
+  const [hover, setHover] = useState<{ date: string; minutes: number } | null>(null);
+  const [overTray, setOverTray] = useState(false);
   const [openDay, setOpenDay] = useState<string | null>(null);
   const today = todayIso();
   const days = Array.from({ length: 7 }, (_, i) => shiftDate(monday, i));
@@ -82,6 +99,37 @@ export function Schedule() {
     for (const e of data.schedule.events) if (days.includes(e.date)) m.set(e.date, [...(m.get(e.date) ?? []), e]);
     return m;
   }, [data.schedule.events, monday]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const taskOf = (id?: string) => (id ? data.tasks.find((t) => t.id === id) : undefined);
+  const scheduled = new Set(data.schedule.events.map((e) => e.taskId));
+  const toPlan = data.tasks.filter((t) => !t.done && !scheduled.has(t.id)).sort(compareTasks(data));
+
+  /** Minute visée dans une colonne, calée sur le quart d'heure. */
+  const minuteAt = (e: React.DragEvent<HTMLElement>, d: Drag) => {
+    const y = e.clientY - e.currentTarget.getBoundingClientRect().top;
+    const m = START_MIN + (y / HOUR_PX) * 60 - d.offsetMin;
+    return Math.max(START_MIN, Math.min(Math.round(m / SNAP_MIN) * SNAP_MIN, 24 * 60 - SNAP_MIN));
+  };
+
+  const drop = (date: string, minutes: number, d: Drag) =>
+    update((draft) => {
+      if (d.kind === "task") {
+        const task = draft.tasks.find((t) => t.id === d.id);
+        if (task) scheduleTask(draft, task, date, toHhmm(minutes), d.length);
+        return;
+      }
+      const ev = draft.schedule.events.find((x) => x.id === d.id);
+      if (!ev) return;
+      ev.date = date;
+      ev.start = toHhmm(minutes);
+      ev.end = toHhmm(minutes + d.length);
+    });
+
+  const endDrag = () => {
+    setDrag(null);
+    setHover(null);
+    setOverTray(false);
+  };
 
   const createAt = (date: string, minutes: number) => {
     const start = Math.floor(minutes / 30) * 30;
@@ -121,6 +169,50 @@ export function Schedule() {
         </button>
       </header>
 
+      {data.tasks.some((t) => !t.done) && (
+        <div
+          className={"task-tray" + (drag?.taskId ? " droppable" : "") + (overTray ? " over" : "")}
+          onDragOver={(e) => {
+            if (!drag?.taskId) return;
+            e.preventDefault();
+            setOverTray(true);
+          }}
+          onDragLeave={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) setOverTray(false);
+          }}
+          onDrop={(e) => {
+            if (!drag?.taskId) return;
+            e.preventDefault();
+            const id = drag.taskId;
+            update((d) => unscheduleTask(d, id));
+            endDrag();
+          }}
+        >
+          <span className="muted small">
+            {drag?.taskId ? "Dépose ici pour retirer de l'agenda" : toPlan.length ? "À planifier :" : "Toutes les tâches sont planifiées"}
+          </span>
+          {toPlan.map((t) => (
+            <button
+              key={t.id}
+              className="tray-task"
+              draggable
+              style={{ ["--cat" as string]: priorityOf(t).color }}
+              title="Glisse la tâche sur l'agenda, ou clique pour la modifier"
+              onClick={() => setOpenTask(t)}
+              onDragStart={(e) => {
+                e.dataTransfer.effectAllowed = "move";
+                e.dataTransfer.setData("text/plain", t.title);
+                setDrag({ kind: "task", id: t.id, length: t.duration ?? DEFAULT_DURATION, offsetMin: 0 });
+              }}
+              onDragEnd={endDrag}
+            >
+              <span>{t.title}</span>
+              {t.due && <span className="muted">⏰ {dayHeader(t.due).day}/{t.due.slice(5, 7)}</span>}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="week-scroll">
         <div className="week-grid">
           <div className="week-corner" />
@@ -155,8 +247,23 @@ export function Schedule() {
             return (
               <div
                 key={d}
-                className={"week-col" + (d === today ? " today" : "")}
+                className={"week-col" + (d === today ? " today" : "") + (hover?.date === d ? " drop-target" : "")}
                 style={{ height: GRID_PX, backgroundSize: `100% ${HOUR_PX}px` }}
+                onDragOver={(e) => {
+                  if (!drag) return;
+                  e.preventDefault();
+                  const minutes = minuteAt(e, drag);
+                  if (hover?.date !== d || hover.minutes !== minutes) setHover({ date: d, minutes });
+                }}
+                onDragLeave={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) setHover(null);
+                }}
+                onDrop={(e) => {
+                  if (!drag) return;
+                  e.preventDefault();
+                  drop(d, minuteAt(e, drag), drag);
+                  endDrag();
+                }}
                 onClick={(e) => {
                   if (e.target !== e.currentTarget) return;
                   const y = e.clientY - e.currentTarget.getBoundingClientRect().top;
@@ -164,16 +271,43 @@ export function Schedule() {
                 }}
               >
                 {d === today && nowMin >= START_MIN && <div className="now-line" style={{ top: ((nowMin - START_MIN) / 60) * HOUR_PX }} />}
+                {drag && hover?.date === d && (
+                  <div
+                    className="drop-preview"
+                    style={{
+                      top: ((hover.minutes - START_MIN) / 60) * HOUR_PX,
+                      height: (Math.min(drag.length, 24 * 60 - hover.minutes) / 60) * HOUR_PX - 2,
+                    }}
+                  >
+                    {toHhmm(hover.minutes)}
+                  </div>
+                )}
                 {events.map((ev) => {
                   // Ce qui commence avant 6 h est ramené en haut de la grille.
                   const s = Math.max(toMinutes(ev.start), START_MIN);
                   const len = Math.max(toMinutes(ev.end) - s, SNAP_MIN);
                   const p = pos.get(ev.id)!;
                   const c = catOf(ev.categoryId);
+                  const task = taskOf(ev.taskId);
+                  const title = task?.title ?? ev.title;
                   return (
                     <button
                       key={ev.id}
-                      className={"event" + (len < 45 ? " short" : "")}
+                      className={"event" + (len < 45 ? " short" : "") + (task ? " task-event" : "") + (task?.done ? " done" : "")}
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.effectAllowed = "move";
+                        e.dataTransfer.setData("text/plain", title);
+                        const grabbed = ((e.clientY - e.currentTarget.getBoundingClientRect().top) / HOUR_PX) * 60;
+                        setDrag({
+                          kind: "event",
+                          id: ev.id,
+                          taskId: ev.taskId,
+                          length: toMinutes(ev.end) - toMinutes(ev.start),
+                          offsetMin: Math.floor(grabbed / SNAP_MIN) * SNAP_MIN,
+                        });
+                      }}
+                      onDragEnd={endDrag}
                       style={{
                         top: ((s - START_MIN) / 60) * HOUR_PX,
                         height: (len / 60) * HOUR_PX - 2,
@@ -181,10 +315,10 @@ export function Schedule() {
                         width: `calc(${100 / p.cols}% - 4px)`,
                         ["--cat" as string]: c.color,
                       }}
-                      onClick={() => setDraft(structuredClone(ev))}
-                      title={`${ev.start}–${ev.end} · ${ev.title}`}
+                      onClick={() => (task ? setOpenTask(task) : setDraft(structuredClone(ev)))}
+                      title={`${ev.start}–${ev.end} · ${title}`}
                     >
-                      <span className="event-title">{ev.title}</span>
+                      <span className="event-title">{title}</span>
                       <span className="event-time">
                         {ev.start}–{ev.end}
                       </span>
@@ -198,6 +332,7 @@ export function Schedule() {
       </div>
 
       {draft && <EventModal draft={draft} categories={cats} onClose={() => setDraft(null)} />}
+      {openTask && <TaskModal task={openTask} onClose={() => setOpenTask(null)} />}
       {openDay && <DayModal date={openDay} onClose={() => setOpenDay(null)} />}
     </section>
   );

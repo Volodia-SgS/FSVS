@@ -100,6 +100,8 @@ export interface ScheduleEvent {
   end: string;
   title: string;
   categoryId: string;
+  /** Tâche planifiée sur ce créneau (le titre suit celui de la tâche). */
+  taskId?: string;
 }
 
 export interface Schedule {
@@ -124,6 +126,43 @@ export interface MealPlan {
   done?: MealSlot[];
 }
 
+export const PRIORITIES = [
+  { id: "haute", label: "Haute", color: "#cc4125" },
+  { id: "normale", label: "Normale", color: "#e69138" },
+  { id: "basse", label: "Basse", color: "#6d9eeb" },
+] as const;
+
+export type Priority = (typeof PRIORITIES)[number]["id"];
+
+export interface Subtask {
+  id: string;
+  title: string;
+  done: boolean;
+}
+
+/** Répétition : la tâche suivante est créée quand celle-ci est cochée. */
+export interface Recurrence {
+  every: number;
+  unit: "day" | "week" | "month";
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  notes?: string;
+  priority: Priority;
+  /** Échéance, date ISO (AAAA-MM-JJ). */
+  due?: string;
+  /** Durée estimée en minutes : longueur du créneau quand on la planifie. */
+  duration?: number;
+  subtasks?: Subtask[];
+  recurrence?: Recurrence;
+  /** Date ISO de création. */
+  created: string;
+  /** Date ISO à laquelle elle a été faite. */
+  done?: string;
+}
+
 export interface AppData {
   version: number;
   schedule: Schedule;
@@ -134,4 +173,5 @@ export interface AppData {
   /** Clé = date ISO (AAAA-MM-JJ). */
   mealPlans: Record<string, MealPlan>;
   objectives: Record<NutrientKey, Objective>;
+  tasks: Task[];
 }
