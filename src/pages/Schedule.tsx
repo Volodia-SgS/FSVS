@@ -69,6 +69,28 @@ function layout(events: ScheduleEvent[]) {
 
 type Draft = Omit<ScheduleEvent, "id"> & { id?: string };
 
+/** Items qu'un créneau occupe en partie de l'intérieur (ex. un repas au milieu d'une journée de travail). */
+function containersOf(events: ScheduleEvent[], d: Draft) {
+  const s = toMinutes(d.start);
+  const e = toMinutes(d.end);
+  return events.filter((x) => {
+    if (x.id === d.id || x.taskId || x.date !== d.date) return false;
+    const xs = toMinutes(x.start);
+    const xe = toMinutes(x.end);
+    return xs <= s && e <= xe && (xs < s || e < xe);
+  });
+}
+
+/** Retire le créneau [start, end] de chaque item englobant, qui devient un ou deux morceaux. */
+function cutContainers(events: ScheduleEvent[], d: Draft) {
+  for (const x of containersOf(events, d)) {
+    const after: ScheduleEvent = { ...x, id: newId("ev"), start: d.end };
+    const i = events.indexOf(x);
+    const pieces = [{ ...x, end: d.start }, after].filter((p) => toMinutes(p.end) > toMinutes(p.start));
+    events.splice(i, 1, ...pieces);
+  }
+}
+
 /** Ce qu'on est en train de glisser sur la grille. */
 interface Drag {
   kind: "task" | "event";
@@ -159,7 +181,7 @@ export function Schedule() {
         <div className="legend">
           {cats.map((c) => (
             <span key={c.id} className="legend-item">
-              <span className="legend-dot" style={{ background: c.color }} />
+              <span className="legend-dot" style={{ ["--cat" as string]: c.color }} />
               {c.label}
             </span>
           ))}
@@ -339,10 +361,12 @@ export function Schedule() {
 }
 
 function EventModal({ draft: initial, categories, onClose }: { draft: Draft; categories: Category[]; onClose: () => void }) {
-  const { update } = useStore();
+  const { data, update } = useStore();
   const [draft, setDraft] = useState<Draft>(initial);
+  const [cut, setCut] = useState(true);
   const set = (patch: Partial<Draft>) => setDraft((d) => ({ ...d, ...patch }));
   const timeOk = toMinutes(draft.end) > toMinutes(draft.start);
+  const containers = timeOk ? containersOf(data.schedule.events, draft) : [];
   const title = draft.title.trim();
   const valid = !!title && !!draft.date && timeOk;
 
@@ -351,6 +375,7 @@ function EventModal({ draft: initial, categories, onClose }: { draft: Draft; cat
     if (!valid) return;
     const ev: ScheduleEvent = { ...draft, id: draft.id ?? newId("ev"), title };
     update((d) => {
+      if (cut) cutContainers(d.schedule.events, ev);
       const i = d.schedule.events.findIndex((x) => x.id === ev.id);
       if (i >= 0) d.schedule.events[i] = ev;
       else d.schedule.events.push(ev);
@@ -422,6 +447,25 @@ function EventModal({ draft: initial, categories, onClose }: { draft: Draft; cat
             <input type="time" step={SNAP_MIN * 60} value={draft.end} onChange={(e) => set({ end: e.target.value })} />
           </label>
           {!timeOk && <p className="login-error wide">L'heure de fin doit être après l'heure de début.</p>}
+          {containers.length > 0 && (
+            <label className="wide cut-option">
+              <input type="checkbox" checked={cut} onChange={(e) => setCut(e.target.checked)} />
+              <span>
+                Couper {containers.map((x) => `« ${x.title} »`).join(", ")}
+                <span className="muted small">
+                  {" "}
+                  →{" "}
+                  {containers
+                    .map((x) =>
+                      [x.start < draft.start && `${x.start}–${draft.start}`, draft.end < x.end && `${draft.end}–${x.end}`]
+                        .filter(Boolean)
+                        .join(" et "),
+                    )
+                    .join(" ; ")}
+                </span>
+              </span>
+            </label>
+          )}
         </div>
 
         <div className="modal-foot">
