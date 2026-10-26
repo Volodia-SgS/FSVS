@@ -12,8 +12,6 @@ import { StoreProvider, useStore, type SyncStatus } from "./store";
 import { supabase } from "./supabase";
 import "./styles.css";
 
-const APP_NAME = "Mon espace";
-
 interface Tab {
   id: string;
   label: string;
@@ -103,7 +101,6 @@ function App() {
   return (
     <>
       <header className="top">
-        <h1>{APP_NAME}</h1>
         {supabase && <span className={`sync-dot sync-${syncStatus}`} title={SYNC_LABELS[syncStatus]} aria-label={SYNC_LABELS[syncStatus]} />}
         <nav className="sections">
           {SECTIONS.map((s) => (
