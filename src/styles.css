@@ -1,13 +1,15 @@
 :root {
-  --bg: #f4f5f2;
-  --card: #ffffff;
+  /* Fonds neutres, teintés ensuite par la couleur de la section (voir plus bas). */
+  --bg-base: #f3f3f1;
+  --card-base: #ffffff;
+  --border-base: #e2e2de;
   --text: #1d2420;
-  --muted: #6b746e;
-  --border: #e1e4df;
+  --muted: #6b716d;
   --accent: #2f7d4f;
   --accent-text: #ffffff;
-  --hover: #eef1ec;
   --danger: #b5432f;
+  /* « Bien » (dans la cible, synchronisé…) : reste vert quel que soit le thème de la section. */
+  --good: #2f7d4f;
   /* Couleurs reprises de la mise en forme conditionnelle de l'Excel */
   --ok: #b6d7a8;
   --warn: #ffe599;
@@ -15,28 +17,71 @@
   --ok-text: #234d16;
   --warn-text: #5c4600;
   --alert-text: #6b2f05;
+  --tint-bg: 10%;
+  --tint-card: 3%;
+  --tint-border: 22%;
+  --tint-hover: 10%;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #151916;
-    --card: #1e2420;
+    --bg-base: #141516;
+    --card-base: #1d1f20;
+    --border-base: #2f3234;
     --text: #e6ebe7;
-    --muted: #93a098;
-    --border: #2f3832;
+    --muted: #979e9a;
     --accent: #5cb27f;
-    --accent-text: #0e1a12;
-    --hover: #262e29;
+    --accent-text: #0f1311;
     --danger: #ec8b78;
+    --good: #5cb27f;
     --ok: #2f4a26;
     --warn: #4d4216;
     --alert: #55331c;
     --ok-text: #c5e6b8;
     --warn-text: #f5e3a1;
     --alert-text: #f8cfae;
+    --tint-bg: 9%;
+    --tint-card: 5%;
+    --tint-border: 28%;
+    --tint-hover: 14%;
     color-scheme: dark;
   }
+}
+
+/* Couleur de chaque section (posée sur <html data-section>) ; Nutrition garde le vert de base. */
+:root[data-section="agenda"] {
+  --accent: #2f6fb5;
+}
+:root[data-section="taches"] {
+  --accent: #a67c00;
+}
+:root[data-section="projets"] {
+  --accent: #7a4fc2;
+}
+:root[data-section="finance"] {
+  --accent: #c0364f;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-section="agenda"] {
+    --accent: #6fa8e8;
+  }
+  :root[data-section="taches"] {
+    --accent: #e3b341;
+  }
+  :root[data-section="projets"] {
+    --accent: #a98be6;
+  }
+  :root[data-section="finance"] {
+    --accent: #f0788c;
+  }
+}
+:root {
+  --bg: color-mix(in srgb, var(--accent) var(--tint-bg), var(--bg-base));
+  --card: color-mix(in srgb, var(--accent) var(--tint-card), var(--card-base));
+  --border: color-mix(in srgb, var(--accent) var(--tint-border), var(--border-base));
+  --hover: color-mix(in srgb, var(--accent) var(--tint-hover), var(--card-base));
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, var(--card));
 }
 
 * {
@@ -142,6 +187,7 @@ button.link {
   color: var(--muted);
 }
 
+/* En-tête dans la couleur pleine de la section. */
 .top {
   position: sticky;
   top: 0;
@@ -150,12 +196,12 @@ button.link {
   align-items: center;
   gap: 24px;
   padding: 10px 20px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--accent-text);
 }
 .top h1 {
   font-size: 18px;
-  color: var(--accent);
+  color: inherit;
 }
 .top nav {
   display: flex;
@@ -167,10 +213,21 @@ button.link {
   background: none;
   border-radius: 999px;
   white-space: nowrap;
+  color: inherit;
+  opacity: 0.85;
+}
+.top nav button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-text) 14%, transparent);
+  opacity: 1;
 }
 .top nav button.active {
-  background: var(--hover);
-  font-weight: 600;
+  background: color-mix(in srgb, var(--accent-text) 22%, transparent);
+  font-weight: 650;
+  opacity: 1;
+}
+/* Les icônes ne servent qu'à la barre du bas sur mobile. */
+.top .sections button span {
+  display: none;
 }
 
 main {
@@ -962,9 +1019,10 @@ label.inline {
   flex: none;
   margin-left: -14px;
   background: var(--muted);
+  box-shadow: 0 0 0 2px var(--accent-text);
 }
 .sync-synced {
-  background: var(--accent);
+  background: var(--good);
 }
 .sync-syncing {
   background: var(--accent);
@@ -1479,6 +1537,376 @@ label.inline {
   text-decoration: line-through;
 }
 
+/* ---- Budget (mise en page du classeur Excel) */
+.sheet-card {
+  padding: 14px;
+}
+.sheet-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 14px;
+}
+.sheet-nav h2 {
+  margin: 0;
+}
+.sheet-nav .week-nav {
+  flex: 1;
+}
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sheet-top {
+  display: grid;
+  grid-template-columns: minmax(230px, 1fr) minmax(0, 2fr) minmax(230px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.sheet-mid {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 180px;
+  gap: 18px;
+  align-items: start;
+}
+.sheet-mid.no-account {
+  grid-template-columns: minmax(0, 1fr);
+}
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+.xl-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.xl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 32px;
+  padding: 5px 10px;
+  background: var(--head, var(--hover));
+  color: #1d2420;
+  font-weight: 700;
+}
+.xl-head.dark {
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.xl-head input {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 6px;
+  font-weight: 700;
+}
+.xl-head button {
+  color: #1d2420;
+  padding: 0 6px;
+}
+.xl-sub,
+.xl-row,
+.xl-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  border-top: 1px solid var(--border);
+}
+.xl-sub,
+.xl-total {
+  font-weight: 700;
+}
+.xl-row > span:first-child,
+.xl-total > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.xl-row > span:last-child,
+.xl-total > span:last-child {
+  white-space: nowrap;
+}
+button.xl-row {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+}
+button.xl-row:hover:not(:disabled),
+button.xl-row.open {
+  background: var(--hover);
+}
+.xl-row .over {
+  color: var(--danger);
+  font-weight: 600;
+}
+.xl-row.editing input {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 6px;
+}
+.xl-row.editing button {
+  padding: 0 6px;
+}
+.xl-add {
+  margin: 4px 6px 6px;
+  padding: 3px 6px;
+  font-size: 13px;
+}
+.xl-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 8px 18px;
+  background: var(--hover);
+}
+.xl-detail input {
+  width: 100%;
+  padding: 3px 6px;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.xl-detail input.invalid {
+  border-color: var(--danger);
+}
+.op {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+.op > span:first-child {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.op.refund > span:nth-child(2) {
+  color: var(--good);
+}
+.op button {
+  padding: 0 6px;
+}
+.xl-total input.money.cell {
+  width: 100px;
+  padding: 2px 6px;
+  font-weight: 700;
+}
+.lv-text-ok {
+  color: var(--good);
+}
+.lv-text-warn {
+  color: #b38600;
+}
+.lv-text-alert {
+  color: var(--danger);
+}
+.new-group {
+  border-style: dashed;
+}
+.new-group input {
+  border: 0;
+  background: transparent;
+  padding: 8px 10px;
+}
+.accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.xl-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 10px;
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.xl-box header {
+  align-self: stretch;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.xl-box b {
+  font-size: 16px;
+  padding: 4px 0;
+}
+.xl-box input.money {
+  width: 140px;
+  text-align: center;
+  font-weight: 600;
+}
+.xl-box .gap {
+  font-size: 12px;
+  color: var(--danger);
+}
+.target-bar {
+  height: 4px;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+}
+.target-bar > div {
+  height: 100%;
+  background: currentColor;
+}
+.target-bar.empty {
+  background: var(--border);
+}
+.total-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.target-of {
+  font-weight: 400;
+  color: var(--muted);
+}
+button.target-of {
+  border: 0;
+  background: none;
+  padding: 0 2px;
+  font: inherit;
+  font-weight: 400;
+  color: var(--muted);
+}
+button.target-of:hover:not(:disabled) {
+  background: none;
+  color: var(--accent);
+  text-decoration: underline;
+}
+.xl-left {
+  padding: 0 10px 6px;
+  margin-top: -3px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--muted);
+}
+.xl-left.over {
+  color: var(--danger);
+}
+.donuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.donut {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.donut figcaption {
+  font-weight: 700;
+  font-size: 13px;
+}
+.donut svg {
+  width: 100%;
+  max-width: 190px;
+}
+.donut circle {
+  transition: stroke-width 0.12s;
+}
+.donut-track {
+  stroke: var(--hover);
+}
+.donut-value {
+  font-size: 5px;
+  font-weight: 700;
+  text-anchor: middle;
+  fill: var(--text);
+}
+.donut-label {
+  font-size: 3px;
+  text-anchor: middle;
+  fill: var(--muted);
+}
+.donut-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 12px;
+  font-size: 12px;
+}
+.donut-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 4px;
+  border-radius: 6px;
+  cursor: default;
+}
+.donut-legend li.active {
+  background: var(--hover);
+}
+.budget-overview td,
+.budget-overview th {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 1150px) {
+  .sheet-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .donuts {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+  .sheet-mid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .accounts {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .accounts .xl-box {
+    flex: 1 1 160px;
+  }
+  .accounts:empty {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .group-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .sheet-top,
+  .group-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ---- Plan de repas */
 .meal-plan-title {
   margin: 4px 0 10px;
@@ -1612,7 +2040,15 @@ label.inline {
     text-align: center;
   }
   .top .sections button span {
+    display: block;
     font-size: 18px;
+  }
+  .top .sections button {
+    color: var(--text);
+  }
+  .top .sections button.active {
+    background: var(--accent-soft);
+    color: var(--accent);
   }
   body {
     padding-bottom: 64px;

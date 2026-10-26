@@ -7,7 +7,6 @@ import {
   DURATIONS,
   deleteTask,
   fmtDuration,
-  recurrenceLabel,
   scheduleTask,
   slotOf,
   toggleTask,
@@ -162,9 +161,6 @@ export function TaskModal({
                       </option>
                     ))}
                   </select>
-                  <span className="muted small">
-                    {recurrenceLabel(task.recurrence)} : la suivante est créée quand tu coches celle-ci.
-                  </span>
                 </>
               )}
             </div>
@@ -192,7 +188,6 @@ export function TaskModal({
                 <button type="button" className="small" onClick={() => setSlot({ date: task.due ?? todayIso(), start: "09:00" })}>
                   📅 Planifier un créneau
                 </button>
-                <span className="muted small">ou glisse-la sur l'agenda depuis l'emploi du temps</span>
               </div>
             )}
           </div>

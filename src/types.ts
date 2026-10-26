@@ -163,6 +163,46 @@ export interface Task {
   done?: string;
 }
 
+/** Un montant ajouté à une ligne du budget : un achat, un virement… (négatif pour un remboursement). */
+export interface BudgetOp {
+  id: string;
+  amount: number;
+  label?: string;
+}
+
+export interface BudgetLine {
+  id: string;
+  label: string;
+  ops: BudgetOp[];
+}
+
+/** Poste de dépense avec son budget cible du mois. */
+export interface BudgetGroup {
+  id: string;
+  label: string;
+  icon: string;
+  /** Couleur de l'en-tête (celles du classeur Excel). */
+  color?: string;
+  target: number;
+  lines: BudgetLine[];
+}
+
+export interface BudgetMonth {
+  incomes: BudgetLine[];
+  groups: BudgetGroup[];
+  /** Solde du compte courant au début du mois. */
+  opening?: number;
+  /** Solde réel constaté à la fin du mois. */
+  closing?: number;
+}
+
+export interface Budget {
+  /** Copié à la création de chaque mois : postes, cibles et montants fixes (abonnements…). */
+  template: BudgetMonth;
+  /** Clé = mois « AAAA-MM ». */
+  months: Record<string, BudgetMonth>;
+}
+
 export interface AppData {
   version: number;
   schedule: Schedule;
@@ -174,4 +214,5 @@ export interface AppData {
   mealPlans: Record<string, MealPlan>;
   objectives: Record<NutrientKey, Objective>;
   tasks: Task[];
+  budget: Budget;
 }

@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import renames from "./renames.json";
 import seed from "./seed.json";
 import { supabase } from "./supabase";
+import { defaultBudget } from "./budget";
 import { guessCategory } from "./foodCategories";
 import type { AppData, Entry, MealSlot } from "./types";
 
@@ -73,6 +74,8 @@ function migrate(data: AppData): AppData {
       : [...data.schedule.categories, TASK_CATEGORY];
     data = { ...data, version: 6, tasks: data.tasks ?? [], schedule: { ...data.schedule, categories } };
   }
+  // v7 : budget mensuel.
+  if (data.version < 7) data = { ...data, version: 7, budget: data.budget ?? defaultBudget() };
   return data;
 }
 

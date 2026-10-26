@@ -104,7 +104,7 @@ export function Tasks() {
             );
           })
         ) : (
-          <p className="muted empty">Rien à faire pour l'instant. Ajoute ta première tâche ci-dessus.</p>
+          <p className="muted empty">Rien à faire.</p>
         ))}
 
       {view === "done" &&
@@ -122,7 +122,7 @@ export function Tasks() {
             </div>
           </>
         ) : (
-          <p className="muted empty">Aucune tâche faite pour l'instant.</p>
+          <p className="muted empty">Aucune tâche faite.</p>
         ))}
 
       {editing && (
