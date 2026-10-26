@@ -1,5 +1,6 @@
-import { StrictMode, useState, type ReactNode } from "react";
+import { StrictMode, useEffect, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import { BudgetMonthPage, BudgetOverview, BudgetTemplate } from "./pages/Budget";
 import { Ingredients } from "./pages/Ingredients";
 import { Login } from "./pages/Login";
 import { Objectives } from "./pages/Objectives";
@@ -41,7 +42,16 @@ const SECTIONS: Section[] = [
   { id: "agenda", label: "Emploi du temps", icon: "📅", tabs: [{ id: "semaine", label: "Semaine", el: <Schedule /> }] },
   { id: "taches", label: "Tâches", icon: "✅", tabs: [{ id: "liste", label: "À faire", el: <Tasks /> }] },
   { id: "projets", label: "Projets", icon: "🗂️", tabs: [{ id: "accueil", label: "Projets", el: <ComingSoon name="Projets" /> }] },
-  { id: "finance", label: "Finance", icon: "💶", tabs: [{ id: "accueil", label: "Finance", el: <ComingSoon name="Finance" /> }] },
+  {
+    id: "finance",
+    label: "Finance",
+    icon: "💶",
+    tabs: [
+      { id: "mois", label: "Mois", el: <BudgetMonthPage /> },
+      { id: "bilan", label: "Bilan", el: <BudgetOverview /> },
+      { id: "modele", label: "Modèle", el: <BudgetTemplate /> },
+    ],
+  },
 ];
 
 const SYNC_LABELS: Record<SyncStatus, string> = {
@@ -75,6 +85,13 @@ function App() {
   const [[sectionId, tabId], setRoute] = useState<[string, string]>(parseHash);
   const section = SECTIONS.find((s) => s.id === sectionId) ?? SECTIONS[0];
   const tab = section.tabs.find((t) => t.id === tabId) ?? section.tabs[0];
+
+  // Thème de couleur de la section, repris aussi par la barre du navigateur sur mobile.
+  useEffect(() => {
+    document.documentElement.dataset.section = section.id;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", accent);
+  }, [section.id]);
 
   const go = (s: Section, t: Tab = s.tabs[0]) => {
     setRoute([s.id, t.id]);
