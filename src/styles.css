@@ -159,10 +159,14 @@ button.link {
 }
 
 /* En-tête noir, souligné d'un trait néon de la couleur de la section. */
-.top {
+/* En-tête et sous-onglets restent ensemble en haut de l'écran au défilement. */
+.app-nav {
   position: sticky;
   top: 0;
   z-index: 5;
+}
+.top {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

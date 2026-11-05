@@ -100,6 +100,7 @@ function App() {
   if (supabase && !session) return <Login />;
   return (
     <>
+      <div className="app-nav">
       <header className="top">
         {supabase && <span className={`sync-dot sync-${syncStatus}`} title={SYNC_LABELS[syncStatus]} aria-label={SYNC_LABELS[syncStatus]} />}
         <nav className="sections">
@@ -119,6 +120,7 @@ function App() {
           ))}
         </nav>
       )}
+      </div>
       <main key={section.id}>{tab.el}</main>
     </>
   );

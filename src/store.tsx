@@ -5,7 +5,7 @@ import seed from "./seed.json";
 import { supabase } from "./supabase";
 import { defaultBudget } from "./budget";
 import { guessCategory } from "./foodCategories";
-import type { AppData, Entry, MealSlot } from "./types";
+import type { AppData, Entry, MealPlan, MealSlot, RecipeItem } from "./types";
 
 const STORAGE_KEY = "nutrition-data-v1";
 const SYNC_KEY = "nutrition-sync-v1";
@@ -76,7 +76,42 @@ function migrate(data: AppData): AppData {
   }
   // v7 : budget mensuel.
   if (data.version < 7) data = { ...data, version: 7, budget: data.budget ?? defaultBudget() };
+  // v8 : la mousse chocolat aux haricots rouges passe d'ingrédient à recette.
+  if (data.version < 8) data = { ...mousseHrToRecipe(data), version: 8 };
   return data;
+}
+
+/** Remplace l'ingrédient par une recette de 6 repas ; les entrées existantes gardent leur quantité (1 portion = 1 repas). */
+function mousseHrToRecipe(data: AppData): AppData {
+  const OLD_ID = "ing-91";
+  const NEW_ID = "rec-mousse-hr";
+  const items: RecipeItem[] = [
+    { refId: "ing-90", qty: 400, unit: "g" }, // Haricots rouges
+    { refId: "ing-89", qty: 240, unit: "g" }, // Chocolat pâtissier
+    { refId: "ing-36", qty: 1, unit: "portion" }, // Whey
+  ];
+  const has = (id: string) => data.ingredients.some((i) => i.id === id);
+  const usedInRecipe = data.recipes.some((r) => r.items.some((it) => it.refId === OLD_ID));
+  // Données modifiées à la main (ingrédient retiré, déjà utilisé dans une recette…) : on n'y touche pas.
+  if (!has(OLD_ID) || usedInRecipe || !items.every((it) => has(it.refId))) return data;
+
+  const convert = (entries: Entry[]): Entry[] =>
+    entries.map((e) =>
+      e.kind === "ingredient" && e.refId === OLD_ID ? { id: e.id, kind: "recipe", refId: NEW_ID, qty: e.qty } : e,
+    );
+  const mealPlans: AppData["mealPlans"] = {};
+  for (const [date, plan] of Object.entries(data.mealPlans ?? {})) {
+    const meals: MealPlan["meals"] = {};
+    for (const [slot, entries] of Object.entries(plan.meals)) meals[slot as MealSlot] = convert(entries ?? []);
+    mealPlans[date] = { ...plan, meals };
+  }
+  return {
+    ...data,
+    ingredients: data.ingredients.filter((i) => i.id !== OLD_ID),
+    recipes: [...data.recipes, { id: NEW_ID, name: "Mousse chocolat HR", portions: 6, items }],
+    days: Object.fromEntries(Object.entries(data.days).map(([date, entries]) => [date, convert(entries)])),
+    mealPlans,
+  };
 }
 
 function load(): AppData {
